@@ -4,9 +4,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 /**
- * Created by zhengjiafeng on 2019/2/4
+ * Created by zjfcabbage on 2019/2/4
  *
- * @author 郑佳锋 zhengjiafeng@bytedance.com
+ * @author 糟老头子 zjfcabbage
  */
 public class LogUtil {
     private static final String LOGUTIL = LogUtil.class.getSimpleName();

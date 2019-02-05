@@ -8,9 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import com.zjf.transaction.util.LogUtil;
 
 /**
- * Created by zhengjiafeng on 2019/2/4
+ * Created by zjfcabbage on 2019/2/4
  *
- * @author 郑佳锋 zhengjiafeng@bytedance.com
+ * @author 糟老头子 zjfcabbage
  */
 public class BaseActivity extends AppCompatActivity {
     @Override
