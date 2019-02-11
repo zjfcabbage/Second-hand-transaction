@@ -19,7 +19,7 @@ public class ImageLoaderUtil {
         }
         GlideApp.with(imageView.getContext())
                 .load(imageUrl)
-                .placeholder(R.drawable.placeImage)
+                .placeholder(R.drawable.place_image)
                 .into(imageView);
     }
 }

@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Transaction</string>
+    <string name="app_name">易闲置</string>
+    <!--module login-->
+    <string name="module_login_hint_username">请输入用户名</string>
+    <string name="module_login_hint_password">请输入密码</string>
+    <string name="module_login_btn_login">登录</string>
+    <string name="module_login_btn_register">注册</string>
 </resources>
