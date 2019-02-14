@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <declare-styleable name="CircleImageView">
+        <attr name="type" format="enum">
+            <enum name="circle" value="0" />
+            <enum name="rectangle" value="1" />
+        </attr>
+        <attr name="left_top" format="dimension"/>
+        <attr name="right_top" format="dimension"/>
+        <attr name="left_bottom" format="dimension"/>
+        <attr name="right_bottom" format="dimension"/>
+    </declare-styleable>
 </resources>
