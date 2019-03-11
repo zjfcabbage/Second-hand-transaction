@@ -3,14 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".user.RegisterActivity"
     android:gravity="center_horizontal"
     android:paddingTop="100dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.zjf.transaction.app.widget.RoundImageView
         android:id="@+id/iv_user"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/icon_launcher"/>
+        app:type="circle"
+        android:scaleType="center"
+        android:src="@drawable/cat"/>
 
 </RelativeLayout>

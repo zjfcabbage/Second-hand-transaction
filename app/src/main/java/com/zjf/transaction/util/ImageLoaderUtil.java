@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.zjf.transaction.R;
-import com.zjf.transaction.app.glide.GlideApp;
+import com.zjf.transaction.util.glide.GlideApp;
 
 
 /**

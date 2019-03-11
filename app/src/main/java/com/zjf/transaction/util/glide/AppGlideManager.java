@@ -1,4 +1,4 @@
-package com.zjf.transaction.app.glide;
+package com.zjf.transaction.util.glide;
 
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;
