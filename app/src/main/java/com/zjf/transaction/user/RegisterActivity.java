@@ -1,11 +1,11 @@
 package com.zjf.transaction.user;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.zjf.transaction.R;
+import com.zjf.transaction.base.BaseActivity;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,19 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".user.RegisterActivity"
     android:gravity="center_horizontal"
-    android:paddingTop="100dp">
+    android:paddingTop="100dp"
+    tools:context=".user.RegisterActivity">
 
     <com.zjf.transaction.app.widget.RoundImageView
         android:id="@+id/iv_user"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:type="circle"
-        android:scaleType="center"
-        android:src="@drawable/cat"/>
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="80dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/cat"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:type="circle" />
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/et_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/background_login"
+        android:hint="@string/module_login_hint_username"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:textColor="@color/color_cacaca"
+        android:textColorHint="@color/color_cacaca"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/et_password"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_login"
+        android:hint="@string/module_login_hint_password"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:textColor="@color/color_cacaca"
+        android:textColorHint="@color/color_cacaca"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/btn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:alpha="0.8"
+        android:background="@drawable/btn_login"
+        android:gravity="center"
+        android:letterSpacing="0.5"
+        android:text="@string/module_login_btn_register"
+        android:textColor="@color/color_3f9df7"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_password" />
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.zjf.transaction.base;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -59,5 +60,10 @@ public class BaseActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         LogUtil.d("=== onNewIntent : " + getLocalClassName() + " ===");
+    }
+
+    public static void start(Context context, Class<? extends BaseActivity> clazz) {
+        Intent intent = new Intent(context, clazz);
+        context.startActivity(intent);
     }
 }
