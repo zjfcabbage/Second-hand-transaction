@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <RadioButton
+        android:id="@+id/btn_main_page"
+        style="@style/MainBottomBarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/bg_bottom_bar_main_page"
+        android:text="@string/activity_main_bottom_bar_main_page" />
+
+    <RadioButton
+        android:id="@+id/btn_message"
+        style="@style/MainBottomBarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/bg_bottom_bar_message"
+        android:text="@string/activity_main_bottom_bar_message" />
+
+    <RadioButton
+        android:id="@+id/btn_shop_car"
+        style="@style/MainBottomBarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/bg_bottom_bar_shop_car"
+        android:text="@string/activity_main_bottom_bar_shop_car" />
+
+    <RadioButton
+        android:id="@+id/btn_mine"
+        style="@style/MainBottomBarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/bg_bottom_bar_mine"
+        android:text="@string/activity_main_bottom_bar_me" />
+</RadioGroup>

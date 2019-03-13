@@ -16,9 +16,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".user.RegisterActivity"/>
         <activity android:name=".user.LoginActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".SplashActivity" />
         <activity
-            android:name=".SplashActivity">
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

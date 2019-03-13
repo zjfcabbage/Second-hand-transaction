@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.zjf.transaction.base.BaseActivity;
 import com.zjf.transaction.user.LoginActivity;
-import com.zjf.transaction.user.UserPreference;
+import com.zjf.transaction.user.UserConfig;
 
 /**
  * Created by zhengjiafeng on 2019/3/12
@@ -17,8 +17,8 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String account = UserPreference.inst().getUserAccount();
-        String password = UserPreference.inst().getUserPassword();
+        String account = UserConfig.inst().getUserAccount();
+        String password = UserConfig.inst().getUserPassword();
         if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
             LoginActivity.start(this, LoginActivity.class);
         } else {

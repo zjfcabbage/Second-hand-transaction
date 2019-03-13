@@ -17,49 +17,49 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogUtil.d("=== onCreate : " + getLocalClassName() + " ===");
+        LogUtil.d("=== onCreate : %s ===", getLocalClassName());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        LogUtil.d("=== onStart : " + getLocalClassName() + " ===");
+        LogUtil.d("=== onStart : %s ===", getLocalClassName());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        LogUtil.d("=== onResume : " + getLocalClassName() + " ===");
+        LogUtil.d("=== onResume : %s", getLocalClassName());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        LogUtil.d("=== onPause : " + getLocalClassName() + " ===");
+        LogUtil.d("=== onPause : %s", getLocalClassName());
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        LogUtil.d("=== onStop : " + getLocalClassName() + " ===");
+        LogUtil.d("=== onStop : %s", getLocalClassName());
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LogUtil.d("=== onDestroy : " + getLocalClassName() + " ===");
+        LogUtil.d("=== onDestroy : %s", getLocalClassName());
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        LogUtil.d("=== onRestart : " + getLocalClassName() + " ===");
+        LogUtil.d("=== onRestart : %s", getLocalClassName());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        LogUtil.d("=== onNewIntent : " + getLocalClassName() + " ===");
+        LogUtil.d("=== onNewIntent : %s", getLocalClassName());
     }
 
     public static void start(Context context, Class<? extends BaseActivity> clazz) {

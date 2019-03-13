@@ -8,11 +8,11 @@
     android:paddingTop="100dp"
     tools:context=".user.RegisterActivity">
 
-    <com.zjf.transaction.app.widget.RoundImageView
+    <com.zjf.transaction.widget.RoundImageView
         android:id="@+id/iv_user"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="30dp"
         android:scaleType="fitXY"
         android:src="@drawable/cat"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -24,33 +24,70 @@
         android:id="@+id/et_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/background_login"
         android:hint="@string/module_login_hint_username"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:textColor="@color/color_cacaca"
-        android:textColorHint="@color/color_cacaca"
+        android:textColor="@color/color_CACACA"
+        android:textColorHint="@color/color_CACACA"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/et_password"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_user" />
 
     <EditText
         android:id="@+id/et_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:background="@drawable/background_login"
         android:hint="@string/module_login_hint_password"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:textColor="@color/color_cacaca"
-        android:textColorHint="@color/color_cacaca"
+        android:textColor="@color/color_CACACA"
+        android:textColorHint="@color/color_CACACA"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/et_account" />
+
+    <LinearLayout
+        android:id="@+id/layout_spinner"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_password">
+
+        <Spinner
+            android:id="@+id/spinner_province"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_login_spinner" />
+
+        <Spinner
+            android:id="@+id/spinner_city"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_login_spinner" />
+
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/spinner_university"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_login_spinner"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_spinner" />
 
     <TextView
         android:id="@+id/btn_login"
@@ -67,7 +104,7 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_password" />
+        app:layout_constraintTop_toBottomOf="@id/spinner_university" />
 
 
 </android.support.constraint.ConstraintLayout>

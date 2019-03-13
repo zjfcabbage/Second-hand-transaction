@@ -20,4 +20,20 @@
         <item name="android:textColor">@color/color_FFFFFF</item>
     </style>
 
+    <style name="MainBottomBarButton">
+        <item name="android:button">@null</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@null</item>
+        <item name="android:textColor">@color/activity_main_bottom_bar_text</item>
+    </style>
+
+    <style name="BoldText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
 </resources>

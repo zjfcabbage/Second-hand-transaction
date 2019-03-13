@@ -1,4 +1,4 @@
-package com.zjf.transaction.app.widget;
+package com.zjf.transaction.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;

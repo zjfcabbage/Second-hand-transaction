@@ -6,4 +6,9 @@
     <string name="module_login_btn_login">登录</string>
     <string name="module_login_btn_register">注册</string>
     <string name="module_has_no_account">没有账号？</string>
+    <!--MainActivity-->
+    <string name="activity_main_bottom_bar_main_page">首页</string>
+    <string name="activity_main_bottom_bar_message">消息</string>
+    <string name="activity_main_bottom_bar_shop_car">购物车</string>
+    <string name="activity_main_bottom_bar_me">我的</string>
 </resources>
