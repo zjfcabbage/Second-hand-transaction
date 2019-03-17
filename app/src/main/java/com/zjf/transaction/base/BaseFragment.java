@@ -108,6 +108,10 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
+    public String getTitle() {
+        return getClass().getSimpleName();
+    }
+
     public final <T extends View> T findViewById(@IdRes int id) {
         if (id == View.NO_ID || contentCacheView == null) {
             return null;

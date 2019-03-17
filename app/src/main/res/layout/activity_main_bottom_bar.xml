@@ -11,8 +11,17 @@
         style="@style/MainBottomBarButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:drawableTop="@drawable/bg_bottom_bar_main_page"
-        android:text="@string/activity_main_bottom_bar_main_page" />
+        android:text="@string/activity_main_main_page" />
+
+    <RadioButton
+        android:id="@+id/btn_shopcart"
+        style="@style/MainBottomBarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/bg_bottom_bar_shop_car"
+        android:text="@string/activity_main_shop_cart" />
 
     <RadioButton
         android:id="@+id/btn_message"
@@ -20,15 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableTop="@drawable/bg_bottom_bar_message"
-        android:text="@string/activity_main_bottom_bar_message" />
-
-    <RadioButton
-        android:id="@+id/btn_shop_car"
-        style="@style/MainBottomBarButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableTop="@drawable/bg_bottom_bar_shop_car"
-        android:text="@string/activity_main_bottom_bar_shop_car" />
+        android:text="@string/activity_main_message" />
 
     <RadioButton
         android:id="@+id/btn_mine"
@@ -36,5 +37,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableTop="@drawable/bg_bottom_bar_mine"
-        android:text="@string/activity_main_bottom_bar_me" />
+        android:text="@string/activity_main_mine" />
 </RadioGroup>

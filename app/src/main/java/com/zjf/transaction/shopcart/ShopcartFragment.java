@@ -20,7 +20,7 @@ public class ShopcartFragment extends BaseFragment {
     public View onCreateContent(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shopcart, container, false);
         initView(view);
-        return null;
+        return view;
     }
 
     private void initView(View view) {

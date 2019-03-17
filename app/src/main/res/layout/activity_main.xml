@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <FrameLayout
-        android:id="@+id/layout_fragment"
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="51dp"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="44dp"
+        android:layout_marginBottom="50dp" />
+
+    <include
+        android:id="@+id/layout_title"
+        layout="@layout/layout_common_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_alignParentTop="true" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_CACACA"
-        android:layout_alignTop="@id/layout_bottom_bar"/>
+        android:layout_height="0.5dp"
+        android:layout_alignTop="@id/layout_bottom_bar"
+        android:background="@color/color_EEEEEE" />
 
-    <include layout="@layout/activity_main_bottom_bar"
+    <include
         android:id="@+id/layout_bottom_bar"
+        layout="@layout/activity_main_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

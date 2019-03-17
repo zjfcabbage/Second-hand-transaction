@@ -16,8 +16,9 @@
     <TextView
         android:id="@+id/tv_common_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
+        android:gravity="center"
         android:textColor="@color/color_303030"
         android:textSize="18sp"
         android:theme="@style/BoldText"
@@ -30,6 +31,6 @@
         android:layout_alignParentEnd="true"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:src="@drawable/icon_common_more"/>
+        android:src="@drawable/icon_common_more" />
 
 </RelativeLayout>
