@@ -17,6 +17,7 @@ import com.zjf.transaction.base.BaseAdapter;
 import com.zjf.transaction.base.BaseViewHolder;
 import com.zjf.transaction.main.model.Commodity;
 import com.zjf.transaction.util.ImageLoaderUtil;
+import com.zjf.transaction.util.TextUtil;
 import com.zjf.transaction.widget.RoundImageView;
 
 import java.util.ArrayList;
@@ -48,19 +49,7 @@ public class MainAdapter extends BaseAdapter<Commodity> {
         public void onBind(Commodity data) {
             ImageLoaderUtil.loadImage(ivCommodity, data.getImage());
             tvCommodity.setText(data.getMsg());
-            tvRMB.setText(createPrice(data.getPrice()));
-        }
-
-        private CharSequence createPrice(float price) {
-            SpannableStringBuilder builder = new SpannableStringBuilder();
-            final Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.icon_price);
-            if (drawable != null) {
-                builder.append("  ").append(String.valueOf(price));
-                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-                ImageSpan span = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
-                builder.setSpan(span, 1, 2, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            }
-            return builder;
+            tvRMB.setText(TextUtil.createPrice(data.getPrice()));
         }
 
         public ViewHolder(@NonNull View itemView) {

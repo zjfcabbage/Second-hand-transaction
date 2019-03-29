@@ -11,4 +11,7 @@
     <string name="activity_main_message">消息</string>
     <string name="activity_main_shop_cart">购物车</string>
     <string name="activity_main_mine">我的</string>
+    <!--购物车-->
+    <string name="shopcart_choose_all">全选</string>
+    <string name="shopcart_pay">结算</string>
 </resources>

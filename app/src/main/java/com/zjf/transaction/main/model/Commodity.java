@@ -12,9 +12,6 @@ public class Commodity {
     private String msg;
     private float price;
 
-    public Commodity() {
-    }
-
     public Commodity(int image, String msg, float price) {
         this.image = image;
         this.msg = msg;

@@ -1,6 +1,6 @@
 package com.zjf.transaction.app;
 
-import android.app.Application;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 /**
@@ -11,14 +11,14 @@ import android.support.annotation.NonNull;
 public class AppConfig {
     public static final String BASE_URL = "http://";
 
-    private static volatile Application application;
+    private static volatile Context application;
 
-    public static void initApplication(Application appcontext) {
-        application = appcontext;
+    public static void initApplication(Context appContext) {
+        application = appContext;
     }
 
     @NonNull
-    public static synchronized Application getApplication() {
+    public static synchronized Context context() {
         if (application == null) {
             throw new IllegalStateException("App may be not initialized!");
         }

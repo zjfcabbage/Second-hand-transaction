@@ -21,7 +21,7 @@ public class UserConfig {
     private static volatile UserConfig instance;
 
     private UserConfig() {
-        preferences = AppConfig.getApplication().getSharedPreferences(USER_PREFERENCE, Context.MODE_PRIVATE);
+        preferences = AppConfig.context().getSharedPreferences(USER_PREFERENCE, Context.MODE_PRIVATE);
     }
 
     public static UserConfig inst() {

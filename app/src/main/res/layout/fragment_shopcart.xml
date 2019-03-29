@@ -1,9 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_commodity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="shopcart"/>
-</android.support.constraint.ConstraintLayout>
+        android:layout_marginBottom="55dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="55dp"
+        android:background="@color/color_EEEEEE" />
+
+    <RelativeLayout
+        android:id="@+id/layout_shopcart_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom"
+        android:gravity="center_vertical"
+        android:paddingStart="15dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="8dp">
+
+
+        <CheckBox
+            android:id="@+id/cb_choose_all"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_common_checkbox"
+            android:button="@null" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/cb_choose_all"
+            android:gravity="center_vertical"
+            android:text="@string/shopcart_choose_all"
+            android:textColor="@color/color_303030"
+            android:textSize="15sp"
+            android:includeFontPadding="false"
+            android:theme="@style/BoldText" />
+
+        <TextView
+            android:id="@+id/tv_pay"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_shopcart_btn_pay"
+            android:gravity="center"
+            android:text="@string/shopcart_pay"
+            android:textColor="@color/color_white"
+            android:textSize="18sp"
+            android:theme="@style/BoldText" />
+
+        <TextView
+            android:id="@+id/tv_all_money"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="15dp"
+            android:layout_toStartOf="@id/tv_pay"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_303030"
+            android:textSize="18sp"
+            android:theme="@style/BoldText"
+            tools:text="合计:" />
+
+    </RelativeLayout>
+
+</FrameLayout>
