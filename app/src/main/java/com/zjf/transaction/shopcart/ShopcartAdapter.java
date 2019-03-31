@@ -12,7 +12,6 @@ import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseAdapter;
 import com.zjf.transaction.base.BaseViewHolder;
 import com.zjf.transaction.main.model.Commodity;
-import com.zjf.transaction.shopcart.listener.ShopcartItemClickListener;
 import com.zjf.transaction.shopcart.model.ShopcartItem;
 import com.zjf.transaction.user.model.UserInfo;
 import com.zjf.transaction.util.ImageLoaderUtil;
@@ -25,7 +24,6 @@ import com.zjf.transaction.util.TextUtil;
  */
 public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
 
-    private ShopcartItemClickListener listener;
 
     @NonNull
     @Override
@@ -95,7 +93,4 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
         }
     }
 
-    public void setListener(ShopcartItemClickListener listener) {
-        this.listener = listener;
-    }
 }
