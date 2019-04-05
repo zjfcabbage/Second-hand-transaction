@@ -40,13 +40,13 @@ public class MainAdapter extends BaseAdapter<Commodity> {
 
     static class ViewHolder extends BaseViewHolder<Commodity> {
 
-        private ImageView ivCommodity;
+        private ImageView ivCommodity, ivAddToShopcart;
         private ViewGroup msgLayout;
         private RoundImageView ivUserPic;
         private TextView tvCommodity, tvRMB;
 
         @Override
-        public void onBind(Commodity data) {
+        public void onBind(Commodity data, int position) {
             ImageLoaderUtil.loadImage(ivCommodity, data.getImage());
             tvCommodity.setText(data.getMsg());
             tvRMB.setText(TextUtil.createPrice(data.getPrice()));
@@ -59,7 +59,22 @@ public class MainAdapter extends BaseAdapter<Commodity> {
             ivUserPic = msgLayout.findViewById(R.id.iv_user_pic);
             tvCommodity = msgLayout.findViewById(R.id.tv_commodity);
             tvRMB = msgLayout.findViewById(R.id.tv_RMB);
+            ivAddToShopcart = msgLayout.findViewById(R.id.iv_add_shopcart);
             ImageLoaderUtil.loadImage(ivUserPic, R.drawable.cat);
+
+            msgLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: 2019/4/2 跳转商品详情页
+                }
+            });
+
+            ivAddToShopcart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: 2019/4/2 加入购物车
+                }
+            });
         }
     }
 }

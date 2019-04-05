@@ -25,7 +25,7 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
      * viewholder绑定到view
      * @param data 数据
      */
-    public abstract void onBind(T data);
+    public abstract void onBind(T data, int position);
 
     public Context getContext() {
         return itemView.getContext();

@@ -1,5 +1,6 @@
 package com.zjf.transaction.util;
 
+import android.graphics.Bitmap;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -27,6 +28,13 @@ public class ImageLoaderUtil {
     public static void loadImage(ImageView imageView, @DrawableRes @NonNull int drawableId) {
         GlideApp.with(imageView.getContext())
                 .load(drawableId)
+                .placeholder(R.drawable.place_image)
+                .into(imageView);
+    }
+
+    public static void loadImage(ImageView imageView, Bitmap bitmap) {
+        GlideApp.with(imageView.getContext())
+                .load(bitmap)
                 .placeholder(R.drawable.place_image)
                 .into(imageView);
     }

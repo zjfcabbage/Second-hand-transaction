@@ -15,16 +15,17 @@ import com.zjf.transaction.main.MainFragment;
 import com.zjf.transaction.mine.MineFragment;
 import com.zjf.transaction.msg.MsgFragment;
 import com.zjf.transaction.shopcart.ShopcartFragment;
+import com.zjf.transaction.util.ScreenUtil;
 
 public class MainActivity extends BaseActivity {
+
+    public static final String KEY_TITLE = "key_title";
 
     private final SparseArray<BaseFragment> fragmentArray = new SparseArray<>(4);
     private static final SparseIntArray checkFragmentIndex = new SparseIntArray();
     private static final SparseIntArray titleArray = new SparseIntArray(4);
     private RadioGroup radioGroup;
     private int defaultIndex = 0;
-    private ViewGroup layoutTitle;
-    private TextView tvTitle;
 
     static {
         checkFragmentIndex.put(0, R.id.btn_main_page);
@@ -47,16 +48,9 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initTitleLayout();
+        ScreenUtil.hideStatusBar(this);
         initBottomBar();
         performCheck(checkFragmentIndex.get(defaultIndex));
-    }
-
-    private void initTitleLayout() {
-        layoutTitle = findViewById(R.id.layout_title);
-        layoutTitle.findViewById(R.id.iv_common_back).setVisibility(View.GONE);
-        layoutTitle.findViewById(R.id.iv_common_more).setVisibility(View.GONE);
-        tvTitle = layoutTitle.findViewById(R.id.tv_common_title);
     }
 
     private void initBottomBar() {
@@ -79,7 +73,6 @@ public class MainActivity extends BaseActivity {
 
     private void performCheck(int checkId) {
         radioGroup.check(checkId);
-        tvTitle.setText(titleArray.get(checkId));
         final int previousCheckId = checkFragmentIndex.get(defaultIndex);
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         final BaseFragment previousFragment = fragmentArray.get(previousCheckId); //获取之前显示的fragment
@@ -93,7 +86,9 @@ public class MainActivity extends BaseActivity {
             currentFragment = obtainFragment(checkId);
             transaction.add(R.id.fragment_container, currentFragment, currentFragment.getTitle());
         }
-//        currentFragment.setArguments();  //传递参数
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_TITLE, getString(titleArray.get(checkId)));
+        currentFragment.setArguments(bundle);  //传递参数
         currentFragment.setUserVisibleHint(true);
         transaction.show(currentFragment);
         transaction.commitAllowingStateLoss();

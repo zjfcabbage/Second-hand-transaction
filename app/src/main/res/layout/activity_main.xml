@@ -11,15 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="44dp"
         android:layout_marginBottom="50dp" />
 
-    <include
-        android:id="@+id/layout_title"
-        layout="@layout/layout_common_title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_alignParentTop="true" />
 
     <View
         android:layout_width="match_parent"

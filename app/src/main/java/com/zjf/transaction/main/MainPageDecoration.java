@@ -5,18 +5,21 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.zjf.transaction.app.AppConfig;
+import com.zjf.transaction.util.ScreenUtil;
+
 /**
  * Created by zhengjiafeng on 2019/3/16
  *
  * @author 郑佳锋 zhengjiafeng@bytedance.com
  */
-public class DividerDecoration extends RecyclerView.ItemDecoration {
-    private static final String TAG = "DividerDecoration";
+public class MainPageDecoration extends RecyclerView.ItemDecoration {
+    private static final String TAG = "MainPageDecoration";
 
     private int padding;
 
-    public DividerDecoration(int padding) {
-        this.padding = padding;
+    public MainPageDecoration(int padding) {
+        this.padding = ScreenUtil.dp2px(AppConfig.context(), padding);
     }
 
 

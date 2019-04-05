@@ -29,37 +29,37 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        LogUtil.d("=== onResume : %s", getLocalClassName());
+        LogUtil.d("=== onResume : %s ===", getLocalClassName());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        LogUtil.d("=== onPause : %s", getLocalClassName());
+        LogUtil.d("=== onPause : %s ===", getLocalClassName());
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        LogUtil.d("=== onStop : %s", getLocalClassName());
+        LogUtil.d("=== onStop : %s ===", getLocalClassName());
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LogUtil.d("=== onDestroy : %s", getLocalClassName());
+        LogUtil.d("=== onDestroy : %s ===", getLocalClassName());
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        LogUtil.d("=== onRestart : %s", getLocalClassName());
+        LogUtil.d("=== onRestart : %s ===", getLocalClassName());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        LogUtil.d("=== onNewIntent : %s", getLocalClassName());
+        LogUtil.d("=== onNewIntent : %s ===", getLocalClassName());
     }
 
     public static void start(Context context, Class<? extends BaseActivity> clazz) {

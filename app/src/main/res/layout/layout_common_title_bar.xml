@@ -2,24 +2,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="44dp">
+    android:layout_height="wrap_content"
+    android:background="@color/colorAccent">
 
     <ImageView
         android:id="@+id/iv_common_back"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="44dp"
         android:layout_alignParentStart="true"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:src="@drawable/icon_common_back" />
+        android:src="@drawable/icon_common_back"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/tv_common_title"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
+        android:layout_height="44dp"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:textColor="@color/color_303030"
+        android:textColor="@color/color_white"
         android:textSize="18sp"
         android:theme="@style/BoldText"
         tools:text="标题" />
@@ -27,10 +30,12 @@
     <ImageView
         android:id="@+id/iv_common_more"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="44dp"
         android:layout_alignParentEnd="true"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:src="@drawable/icon_common_more" />
+        android:src="@drawable/icon_common_more"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </RelativeLayout>

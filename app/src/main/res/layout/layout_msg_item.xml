@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <com.zjf.transaction.widget.RoundImageView
+        android:id="@+id/iv_user_pic"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:radius="4dp"
+        app:type="rectangle"
+        tools:src="@drawable/zhushu" />
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="3dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/color_303030"
+        android:textSize="16sp"
+        android:theme="@style/BoldText"
+        app:layout_constraintLeft_toRightOf="@id/iv_user_pic"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="傻逼" />
+
+    <TextView
+        android:id="@+id/tv_final_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:textColor="@color/color_CACACA"
+        android:textSize="14sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="30:00" />
+
+    <TextView
+        android:id="@+id/tv_new_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="3dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/color_CACACA"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toRightOf="@id/iv_user_pic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="拳打嘤嘤怪，脚踢竹鼠商" />
+
+</android.support.constraint.ConstraintLayout>

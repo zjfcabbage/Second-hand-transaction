@@ -9,8 +9,25 @@ import com.zjf.transaction.user.model.UserInfo;
  * @author 郑佳锋 zhengjiafeng@bytedance.com
  */
 public class ShopcartItem {
+    private boolean isChecked;
     public UserInfo userInfo;
     public Commodity commodity;
+
+    public ShopcartItem() {
+    }
+
+    public ShopcartItem(UserInfo userInfo, Commodity commodity) {
+        this.userInfo = userInfo;
+        this.commodity = commodity;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
 
     public UserInfo getUserInfo() {
         return userInfo;

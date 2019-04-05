@@ -8,7 +8,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseAdapter;
@@ -30,6 +31,7 @@ public class MainFragment extends BaseFragment {
     private RecyclerView recyclerView;
     private BaseAdapter<Commodity> adapter;
     private StaggeredGridLayoutManager manager;
+    private ViewGroup searchLayout;
 
     @Override
     public View onCreateContent(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,6 +42,17 @@ public class MainFragment extends BaseFragment {
     }
 
     private void initView(View view) {
+        searchLayout = view.findViewById(R.id.layout_search);
+        searchLayout.setPadding(0, ScreenUtil.getStatusBarHeight(), 0, 0); //下移状态栏的高度
+        final EditText etSearch = searchLayout.findViewById(R.id.et_search);
+        final ImageView ivPublish = searchLayout.findViewById(R.id.iv_publish);
+        ivPublish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 2019/4/3 发布商品
+            }
+        });
+
         recyclerView = view.findViewById(R.id.recycler_view);
 
         adapter = new MainAdapter();
@@ -47,16 +60,8 @@ public class MainFragment extends BaseFragment {
         recyclerView.setAdapter(adapter);
         manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
-        DividerDecoration decoration = new DividerDecoration(ScreenUtil.dp2px(getActivity(), 10));
+        MainPageDecoration decoration = new MainPageDecoration(10);
         recyclerView.addItemDecoration(decoration);
-
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
     }
 
     private void init() {

@@ -33,12 +33,11 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         dataList.clear();
         notifyDataSetChanged();
     }
-    
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder<T> holder, int i) {
         final T data = dataList.get(i);
-        holder.onBind(data);
+        holder.onBind(data, i);
     }
 
     @Override

@@ -14,4 +14,9 @@
     <!--购物车-->
     <string name="shopcart_choose_all">全选</string>
     <string name="shopcart_pay">结算</string>
+    <string name="please_input_name">请输入商品</string>
+    <string name="get_picture_from_camera">相机拍摄</string>
+    <string name="get_picture_from_photo">打开相册</string>
+    <string name="permission_rationale_text">使用此功能需要相机权限</string>
+    <string name="string_permission_setting">权限设置</string>
 </resources>

@@ -42,12 +42,8 @@ public class RoundImageView extends AppCompatImageView {
 
     public RoundImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        LogUtil.d("on");
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.RoundImageView);
         type = array.getInt(R.styleable.RoundImageView_type, TYPE_CIRCLE);
-//        if (type == TYPE_RECTANGLE) {
-//            setRadius();  //默认圆角度数
-//        }
         leftTop = array.getDimensionPixelSize(R.styleable.RoundImageView_left_top_radius, leftTop);
         leftBottom = array.getDimensionPixelSize(R.styleable.RoundImageView_left_bottom_radius, leftBottom);
         rightBottom = array.getDimensionPixelSize(R.styleable.RoundImageView_right_bottom_radius, rightBottom);
@@ -62,6 +58,7 @@ public class RoundImageView extends AppCompatImageView {
         mPaint.setFilterBitmap(true);
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
         setLayerType(View.LAYER_TYPE_HARDWARE, null); //取消硬件加速
+        setScaleType(ScaleType.FIT_XY);
     }
 
     @Override

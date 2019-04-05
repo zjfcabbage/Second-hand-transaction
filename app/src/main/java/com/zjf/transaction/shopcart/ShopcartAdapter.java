@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,7 +42,7 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
         private TextView tvUserName, tvCommodityMsg, tvCommodityMoney;
         private CheckBox cbChooseCommodity;
 
-        public ShopcartHolder(View itemView) {
+        public ShopcartHolder(final View itemView) {
             super(itemView);
             commodityLayout = itemView.findViewById(R.id.layout_commodity_item);
             //user layout
@@ -61,6 +62,7 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
             ivCommodityPic = commodityInfoLayout.findViewById(R.id.iv_commodity_pic);
             tvCommodityMsg = commodityInfoLayout.findViewById(R.id.tv_commodity_msg);
             tvCommodityMoney = commodityInfoLayout.findViewById(R.id.tv_commodity_money);
+            cbChooseCommodity = commodityInfoLayout.findViewById(R.id.cb_commodity_choose);
 
             commodityInfoLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,7 +81,7 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
 
 
         @Override
-        public void onBind(ShopcartItem data) {
+        public void onBind(final ShopcartItem data, final int position) {
             UserInfo userInfo = data.getUserInfo();
             Commodity commodity = data.getCommodity();
             if (userInfo == null || commodity == null) {
@@ -90,7 +92,15 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
             ImageLoaderUtil.loadImage(ivCommodityPic, commodity.getImage());
             tvCommodityMsg.setText(commodity.getMsg());
             tvCommodityMoney.setText(TextUtil.createPrice(commodity.getPrice()));
+
+            cbChooseCommodity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    data.setChecked(isChecked);
+                }
+            });
+
+            cbChooseCommodity.setChecked(data.isChecked());
         }
     }
-
 }

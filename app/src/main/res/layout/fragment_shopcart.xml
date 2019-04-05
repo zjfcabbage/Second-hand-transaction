@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/layout_shopcart_title"
+        layout="@layout/layout_common_title_bar" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_commodity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="55dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="55dp"
         android:background="@color/color_EEEEEE" />
 
     <RelativeLayout
@@ -44,10 +49,10 @@
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/cb_choose_all"
             android:gravity="center_vertical"
+            android:includeFontPadding="false"
             android:text="@string/shopcart_choose_all"
             android:textColor="@color/color_303030"
             android:textSize="15sp"
-            android:includeFontPadding="false"
             android:theme="@style/BoldText" />
 
         <TextView
@@ -76,4 +81,4 @@
 
     </RelativeLayout>
 
-</FrameLayout>
+</LinearLayout>
