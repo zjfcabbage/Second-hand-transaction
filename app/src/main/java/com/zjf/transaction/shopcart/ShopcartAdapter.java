@@ -1,5 +1,6 @@
 package com.zjf.transaction.shopcart;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,10 @@ import android.widget.TextView;
 
 import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseAdapter;
+import com.zjf.transaction.base.BaseConstant;
 import com.zjf.transaction.base.BaseViewHolder;
 import com.zjf.transaction.main.model.Commodity;
+import com.zjf.transaction.pages.commodity.CommodityActivity;
 import com.zjf.transaction.shopcart.model.ShopcartItem;
 import com.zjf.transaction.user.model.UserInfo;
 import com.zjf.transaction.util.ImageLoaderUtil;
@@ -68,6 +71,12 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
                 @Override
                 public void onClick(View v) {
                     // TODO: 2019/3/28 跳转到商品详情界面
+                    Bundle bundle = new Bundle();
+                    ShopcartItem shopcartItem = getIndexData();
+                    if (shopcartItem != null && shopcartItem.getCommodity() != null) {
+                        bundle.putInt(BaseConstant.KEY_COMMODITY_ID, shopcartItem.getCommodity().getId());
+                    }
+                    CommodityActivity.start(getContext(), bundle,  CommodityActivity.class);
                 }
             });
             commodityInfoLayout.setOnLongClickListener(new View.OnLongClickListener() {

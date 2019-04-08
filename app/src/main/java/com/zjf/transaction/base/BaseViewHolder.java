@@ -11,14 +11,18 @@ import android.view.View;
  */
 public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
 
-    private T data;
+    private T indexData;
 
     /**
      * 传递数据给viewholder
      * @param data 数据
      */
-    public void setData(T data) {
-        this.data = data;
+    public void setIndexData(T data) {
+        this.indexData = data;
+    }
+
+    public T getIndexData() {
+        return indexData;
     }
 
     /**

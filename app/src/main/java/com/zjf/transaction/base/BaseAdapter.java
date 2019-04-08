@@ -37,6 +37,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder<T> holder, int i) {
         final T data = dataList.get(i);
+        holder.setIndexData(data);
         holder.onBind(data, i);
     }
 

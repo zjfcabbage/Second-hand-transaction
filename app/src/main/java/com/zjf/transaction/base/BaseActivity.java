@@ -14,6 +14,8 @@ import com.zjf.transaction.util.LogUtil;
  * @author 糟老头子 zjfcabbage
  */
 public class BaseActivity extends AppCompatActivity {
+    public static final String KEY_BUNDLE = "key_bundle";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,12 @@ public class BaseActivity extends AppCompatActivity {
 
     public static void start(Context context, Class<? extends BaseActivity> clazz) {
         Intent intent = new Intent(context, clazz);
+        context.startActivity(intent);
+    }
+
+    public static void start(Context context, Bundle bundle, Class<? extends BaseActivity> clazz){
+        Intent intent = new Intent(context, clazz);
+        intent.putExtra(KEY_BUNDLE, bundle);
         context.startActivity(intent);
     }
 }

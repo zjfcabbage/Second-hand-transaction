@@ -10,7 +10,9 @@ import android.support.annotation.DrawableRes;
 public class UserInfo {
 
     private String userName;
-    @DrawableRes private int userPic;
+    private String password;
+    @DrawableRes
+    private int userPic;
     private String province;
     private String city;
     private String university;
@@ -29,6 +31,14 @@ public class UserInfo {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getUserPic() {

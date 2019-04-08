@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @author 糟老头子 zjfcabbage
  */
 public class HttpFactory<T> {
-    private static Retrofit initRestrofit() {
+    private static Retrofit initRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(AppConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -21,7 +21,7 @@ public class HttpFactory<T> {
     }
 
     public T getApi(Class<T> clazz) {
-        return initRestrofit().create(clazz);
+        return initRetrofit().create(clazz);
     }
 
 }

@@ -1,5 +1,7 @@
 package com.zjf.transaction.main.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 
 /**
@@ -8,6 +10,7 @@ import android.support.annotation.DrawableRes;
  * @author 郑佳锋 zhengjiafeng@bytedance.com
  */
 public class Commodity {
+    private int id; //商品id应该用用户名和时间戳保证唯一性
     private int image;
     private String msg;
     private float price;
@@ -15,10 +18,19 @@ public class Commodity {
     public Commodity() {
     }
 
-    public Commodity(int image, String msg, float price) {
+    public Commodity(int id, int image, String msg, float price) {
+        this.id = id;
         this.image = image;
         this.msg = msg;
         this.price = price;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getImage() {

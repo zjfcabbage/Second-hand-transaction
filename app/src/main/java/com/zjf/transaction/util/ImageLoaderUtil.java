@@ -22,20 +22,26 @@ public class ImageLoaderUtil {
         }
         GlideApp.with(imageView.getContext())
                 .load(imageUrl)
-                .placeholder(R.drawable.place_image)
+                .placeholder(R.drawable.icon_placeholder)
                 .into(imageView);
     }
     public static void loadImage(ImageView imageView, @DrawableRes @NonNull int drawableId) {
+        if (imageView == null) {
+            return;
+        }
         GlideApp.with(imageView.getContext())
                 .load(drawableId)
-                .placeholder(R.drawable.place_image)
+                .placeholder(R.drawable.icon_placeholder)
                 .into(imageView);
     }
 
     public static void loadImage(ImageView imageView, Bitmap bitmap) {
+        if (imageView == null) {
+            return;
+        }
         GlideApp.with(imageView.getContext())
                 .load(bitmap)
-                .placeholder(R.drawable.place_image)
+                .placeholder(R.drawable.icon_placeholder)
                 .into(imageView);
     }
 }

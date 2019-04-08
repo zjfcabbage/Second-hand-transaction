@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".pages.commodity.CommodityActivity">
+
+    <include
+        android:id="@+id/commodity_info_title"
+        layout="@layout/layout_common_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/sv_commodity_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/commodity_info_title"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <LinearLayout
+            android:id="@+id/layout_commodity_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/layout_top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <com.zjf.transaction.widget.RoundImageView
+                    android:id="@+id/iv_user_pic"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:radius="4dp"
+                    app:type="rectangle"
+                    tools:src="@drawable/zhushu" />
+
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@color/color_303030"
+                    android:textSize="14sp"
+                    android:theme="@style/BoldText"
+                    app:layout_constraintLeft_toRightOf="@id/iv_user_pic"
+                    app:layout_constraintTop_toTopOf="@id/iv_user_pic"
+                    tools:text="@string/app_name" />
+
+                <TextView
+                    android:id="@+id/tv_publish_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginBottom="3dp"
+                    android:textColor="@color/color_CACACA"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_user_pic"
+                    app:layout_constraintLeft_toRightOf="@id/iv_user_pic"
+                    tools:text="@string/app_name" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/color_E8E8E8" />
+
+            <TextView
+                android:id="@+id/tv_commodity_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="18dp"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"
+                android:theme="@style/BoldText"
+                tools:text="1999" />
+
+            <TextView
+                android:id="@+id/tv_commodity_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:lineSpacingExtra="6dp"
+                android:textColor="@color/color_303030"
+                android:textSize="19sp"
+                tools:text="傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼傻逼" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_E8E8E8"
+        android:layout_above="@id/layout_bottom_bar"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tv_add_shopcart"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:textColor="@color/color_white"
+            android:textSize="16sp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="@string/i_want_it" />
+
+    </android.support.constraint.ConstraintLayout>
+</RelativeLayout>

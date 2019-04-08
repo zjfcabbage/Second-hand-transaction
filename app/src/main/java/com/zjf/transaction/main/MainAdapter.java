@@ -1,6 +1,7 @@
 package com.zjf.transaction.main;
 
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
@@ -14,8 +15,10 @@ import android.widget.TextView;
 
 import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseAdapter;
+import com.zjf.transaction.base.BaseConstant;
 import com.zjf.transaction.base.BaseViewHolder;
 import com.zjf.transaction.main.model.Commodity;
+import com.zjf.transaction.pages.commodity.CommodityActivity;
 import com.zjf.transaction.util.ImageLoaderUtil;
 import com.zjf.transaction.util.TextUtil;
 import com.zjf.transaction.widget.RoundImageView;
@@ -62,10 +65,15 @@ public class MainAdapter extends BaseAdapter<Commodity> {
             ivAddToShopcart = msgLayout.findViewById(R.id.iv_add_shopcart);
             ImageLoaderUtil.loadImage(ivUserPic, R.drawable.cat);
 
-            msgLayout.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO: 2019/4/2 跳转商品详情页
+                    Bundle bundle = new Bundle();
+                    Commodity commodity = getIndexData();
+                    if (commodity != null) {
+                        bundle.putInt(BaseConstant.KEY_COMMODITY_ID, commodity.getId());
+                    }
+                    CommodityActivity.start(getContext(), bundle,  CommodityActivity.class);
                 }
             });
 
