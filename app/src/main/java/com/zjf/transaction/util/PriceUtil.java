@@ -14,7 +14,7 @@ import com.zjf.transaction.app.AppConfig;
  *
  * @author 郑佳锋 zhengjiafeng@bytedance.com
  */
-public class TextUtil {
+public class PriceUtil {
 
     public static CharSequence createPrice(float price) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -27,4 +27,5 @@ public class TextUtil {
         }
         return builder;
     }
+
 }

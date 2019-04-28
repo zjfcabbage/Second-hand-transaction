@@ -5,12 +5,11 @@ import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseActivity;
-import com.zjf.transaction.util.ImageLoaderUtil;
+import com.zjf.transaction.util.ImageUtil;
 import com.zjf.transaction.util.ScreenUtil;
 import com.zjf.transaction.widget.RoundImageView;
 
@@ -51,7 +50,7 @@ public class CommodityActivity extends BaseActivity {
         imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ScreenUtil.dp2px(this, 300)));
         imageView.setPadding(0, 0, 0, ScreenUtil.dp2px(this, 12));
         // TODO: 2019/4/5 根据Uri设置imageView
-        ImageLoaderUtil.loadImage(imageView, "");
+        ImageUtil.loadImage(imageView, "");
         commodityInfoLayout.addView(imageView);
     }
 

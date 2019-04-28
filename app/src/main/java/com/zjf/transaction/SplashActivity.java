@@ -17,7 +17,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String account = UserConfig.inst().getUserAccount();
+        String account = UserConfig.inst().getUserName();
         String password = UserConfig.inst().getUserPassword();
         if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
             LoginActivity.start(this, LoginActivity.class);

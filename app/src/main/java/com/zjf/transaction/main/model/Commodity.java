@@ -1,7 +1,5 @@
 package com.zjf.transaction.main.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 
 /**
@@ -10,35 +8,29 @@ import android.support.annotation.DrawableRes;
  * @author 郑佳锋 zhengjiafeng@bytedance.com
  */
 public class Commodity {
-    private int id; //商品id应该用用户名和时间戳保证唯一性
-    private int image;
+    private String id; //商品id应该用用户名和时间戳保证唯一性
+    private String imageUrl;
     private String msg;
     private float price;
+    private long publishTime;
 
     public Commodity() {
     }
 
-    public Commodity(int id, int image, String msg, float price) {
+    public Commodity(String id, String imageUrl, String msg, float price, long publishTime) {
         this.id = id;
-        this.image = image;
+        this.imageUrl = imageUrl;
         this.msg = msg;
         this.price = price;
+        this.publishTime = publishTime;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public int getImage() {
-        return image;
-    }
-
-    public void setImage(@DrawableRes int image) {
-        this.image = image;
     }
 
     public String getMsg() {
@@ -55,5 +47,21 @@ public class Commodity {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public long getPublishTime() {
+        return publishTime;
+    }
+
+    public void setPublishTime(long publishTime) {
+        this.publishTime = publishTime;
     }
 }

@@ -18,7 +18,7 @@ import com.zjf.transaction.base.BaseAdapter;
 import com.zjf.transaction.base.BaseFragment;
 import com.zjf.transaction.main.model.Commodity;
 import com.zjf.transaction.shopcart.model.ShopcartItem;
-import com.zjf.transaction.user.model.UserInfo;
+import com.zjf.transaction.user.model.User;
 import com.zjf.transaction.util.ScreenUtil;
 
 import java.util.ArrayList;
@@ -50,9 +50,9 @@ public class ShopcartFragment extends BaseFragment {
     private void initData() {
         shopcartItemList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            UserInfo userInfo = new UserInfo("傻逼", R.drawable.cat, "广东", "深圳", "傻逼大学");
-            Commodity commodity = new Commodity(0, R.drawable.cat, "竹鼠一只三块，三只十块，傻逼的快来买", 1999);
-            shopcartItemList.add(new ShopcartItem(userInfo, commodity));
+            User user = new User("傻逼", null, "广东", "深圳", "傻逼大学");
+            Commodity commodity = new Commodity("0", null, "竹鼠一只三块，三只十块，傻逼的快来买", 1999, 0);
+            shopcartItemList.add(new ShopcartItem(user, commodity));
         }
     }
 

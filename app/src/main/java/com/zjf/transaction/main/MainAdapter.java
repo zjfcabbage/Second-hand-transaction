@@ -1,12 +1,7 @@
 package com.zjf.transaction.main;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +14,9 @@ import com.zjf.transaction.base.BaseConstant;
 import com.zjf.transaction.base.BaseViewHolder;
 import com.zjf.transaction.main.model.Commodity;
 import com.zjf.transaction.pages.commodity.CommodityActivity;
-import com.zjf.transaction.util.ImageLoaderUtil;
-import com.zjf.transaction.util.TextUtil;
+import com.zjf.transaction.util.ImageUtil;
+import com.zjf.transaction.util.PriceUtil;
 import com.zjf.transaction.widget.RoundImageView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by zhengjiafeng on 2019/3/15
@@ -50,9 +42,9 @@ public class MainAdapter extends BaseAdapter<Commodity> {
 
         @Override
         public void onBind(Commodity data, int position) {
-            ImageLoaderUtil.loadImage(ivCommodity, data.getImage());
+            ImageUtil.loadImage(ivCommodity, data.getImageUrl());
             tvCommodity.setText(data.getMsg());
-            tvRMB.setText(TextUtil.createPrice(data.getPrice()));
+            tvRMB.setText(PriceUtil.createPrice(data.getPrice()));
         }
 
         public ViewHolder(@NonNull View itemView) {
@@ -63,7 +55,7 @@ public class MainAdapter extends BaseAdapter<Commodity> {
             tvCommodity = msgLayout.findViewById(R.id.tv_commodity);
             tvRMB = msgLayout.findViewById(R.id.tv_RMB);
             ivAddToShopcart = msgLayout.findViewById(R.id.iv_add_shopcart);
-            ImageLoaderUtil.loadImage(ivUserPic, R.drawable.cat);
+            ImageUtil.loadImage(ivUserPic, R.drawable.cat);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -71,7 +63,7 @@ public class MainAdapter extends BaseAdapter<Commodity> {
                     Bundle bundle = new Bundle();
                     Commodity commodity = getIndexData();
                     if (commodity != null) {
-                        bundle.putInt(BaseConstant.KEY_COMMODITY_ID, commodity.getId());
+                        bundle.putString(BaseConstant.KEY_COMMODITY_ID, commodity.getId());
                     }
                     CommodityActivity.start(getContext(), bundle,  CommodityActivity.class);
                 }

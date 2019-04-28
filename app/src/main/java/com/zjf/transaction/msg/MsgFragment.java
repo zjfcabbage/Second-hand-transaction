@@ -41,7 +41,7 @@ public class MsgFragment extends BaseFragment {
     private void initData() {
         msgItemList = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
-            MsgItem item = new MsgItem("傻逼", R.drawable.zhushu, "竹鼠怪，嘤嘤怪", System.currentTimeMillis());
+            MsgItem item = new MsgItem("傻逼", null, "竹鼠怪，嘤嘤怪", System.currentTimeMillis());
             msgItemList.add(item);
         }
     }

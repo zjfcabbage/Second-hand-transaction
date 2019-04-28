@@ -1,7 +1,6 @@
 package com.zjf.transaction.msg;
 
 import android.support.annotation.NonNull;
-import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseAdapter;
 import com.zjf.transaction.base.BaseViewHolder;
 import com.zjf.transaction.msg.model.MsgItem;
-import com.zjf.transaction.util.ImageLoaderUtil;
+import com.zjf.transaction.util.ImageUtil;
 import com.zjf.transaction.util.TimeUtil;
 
 /**
@@ -51,7 +50,7 @@ public class MsgAdapter extends BaseAdapter<MsgItem> {
         @Override
         public void onBind(MsgItem data, int position) {
             if (data != null) {
-                ImageLoaderUtil.loadImage(ivUserPic, data.getUserPicId());
+                ImageUtil.loadImage(ivUserPic, data.getUserPic());
                 tvUserName.setText(data.getUserName());
                 tvNewMsg.setText(data.getNewMsg());
                 tvFinalTime.setText(TimeUtil.formatTime(data.getTimestamp()));

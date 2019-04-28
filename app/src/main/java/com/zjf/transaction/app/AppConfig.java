@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
  * @author 糟老头子 zjfcabbage
  */
 public class AppConfig {
-    public static final String BASE_URL = "http://";
+    public static final String BASE_URL = "http://47.100.61.176:8080";
 
     private static volatile Context application;
 

@@ -1,7 +1,7 @@
 package com.zjf.transaction.shopcart.model;
 
 import com.zjf.transaction.main.model.Commodity;
-import com.zjf.transaction.user.model.UserInfo;
+import com.zjf.transaction.user.model.User;
 
 /**
  * Created by zhengjiafeng on 2019/3/28
@@ -10,14 +10,14 @@ import com.zjf.transaction.user.model.UserInfo;
  */
 public class ShopcartItem {
     private boolean isChecked;
-    public UserInfo userInfo;
+    public User user;
     public Commodity commodity;
 
     public ShopcartItem() {
     }
 
-    public ShopcartItem(UserInfo userInfo, Commodity commodity) {
-        this.userInfo = userInfo;
+    public ShopcartItem(User user, Commodity commodity) {
+        this.user = user;
         this.commodity = commodity;
     }
 
@@ -29,12 +29,12 @@ public class ShopcartItem {
         isChecked = checked;
     }
 
-    public UserInfo getUserInfo() {
-        return userInfo;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Commodity getCommodity() {

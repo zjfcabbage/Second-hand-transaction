@@ -1,22 +1,111 @@
 package com.zjf.transaction.user;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.zjf.transaction.MainActivity;
 import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseActivity;
+import com.zjf.transaction.base.DataResult;
+import com.zjf.transaction.user.api.impl.UserApiImpl;
+import com.zjf.transaction.user.model.User;
+import com.zjf.transaction.util.LogUtil;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
+@SuppressLint("CheckResult")
 public class LoginActivity extends BaseActivity {
 
     private EditText etAccount, etPassword;
+    private AlertDialog dialog;
+    private final UserConfig userConfig = UserConfig.inst();
+    private boolean loginSuccess = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         initView();
+
+        startByRegisterActivity();  //是否是注册后直接登录的
+    }
+
+    private void startByRegisterActivity() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle bundle = intent.getBundleExtra(KEY_BUNDLE);
+            if (bundle != null) {
+                String activity = bundle.getString("activity");
+                User user = bundle.getParcelable("user");
+                if ("RegisterActivity".equalsIgnoreCase(activity) && user != null) {
+                    login(user);
+                }
+            }
+        }
+    }
+
+    /**
+     * 登录
+     *
+     * @param user 用户对象
+     */
+    private void login(final User user) {
+        dialog = new AlertDialog.Builder(LoginActivity.this)
+                .setCancelable(false)
+                .setView(R.layout.layout_logining)
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        if (loginSuccess) {
+                            MainActivity.start(LoginActivity.this, MainActivity.class);
+                            LoginActivity.this.finish();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "登录失败，请检查网络后重试", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .create();
+        dialog.show();
+        UserApiImpl.login(user.getUserName(), user.getPassword())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<DataResult<User>>() {
+                    @Override
+                    public void accept(DataResult<User> userDataResult) throws Exception {
+                        if (userDataResult.code == DataResult.CODE_SUCCESS) {
+                            final User currentUser = userDataResult.data;
+                            if (currentUser != null) {
+                                userConfig.setUserName(currentUser.getUserName());
+                                userConfig.setUserPassword(currentUser.getPassword());
+                                userConfig.setUserProvince(currentUser.getProvince());
+                                userConfig.setUserCity(currentUser.getCity());
+                                userConfig.setUserUniversity(currentUser.getUniversity());
+                                userConfig.setUserId(currentUser.getUserId());
+                                userConfig.setUserPicUrl(currentUser.getUserPicUrl());
+                                userConfig.setUser(currentUser);
+                            }
+                            loginSuccess = true;
+                        } else {
+                            LogUtil.d("login error, msg -> %s", userDataResult.msg);
+                        }
+                        dialog.cancel();
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtil.e(throwable.getMessage());
+                        dialog.cancel();
+                    }
+                });
     }
 
     private void initView() {
@@ -25,7 +114,12 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2019/3/12 登陆操作
+                final String account = etAccount.getText().toString();
+                final String password = etPassword.getText().toString();
+                final User user = new User();
+                user.setUserName(account);
+                user.setPassword(password);
+                login(user);
             }
         });
         findViewById(R.id.tv_no_account).setOnClickListener(new View.OnClickListener() {

@@ -17,9 +17,9 @@ import com.zjf.transaction.base.BaseViewHolder;
 import com.zjf.transaction.main.model.Commodity;
 import com.zjf.transaction.pages.commodity.CommodityActivity;
 import com.zjf.transaction.shopcart.model.ShopcartItem;
-import com.zjf.transaction.user.model.UserInfo;
-import com.zjf.transaction.util.ImageLoaderUtil;
-import com.zjf.transaction.util.TextUtil;
+import com.zjf.transaction.user.model.User;
+import com.zjf.transaction.util.ImageUtil;
+import com.zjf.transaction.util.PriceUtil;
 
 /**
  * Created by zhengjiafeng on 2019/3/28
@@ -74,7 +74,7 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
                     Bundle bundle = new Bundle();
                     ShopcartItem shopcartItem = getIndexData();
                     if (shopcartItem != null && shopcartItem.getCommodity() != null) {
-                        bundle.putInt(BaseConstant.KEY_COMMODITY_ID, shopcartItem.getCommodity().getId());
+                        bundle.putString(BaseConstant.KEY_COMMODITY_ID, shopcartItem.getCommodity().getId());
                     }
                     CommodityActivity.start(getContext(), bundle,  CommodityActivity.class);
                 }
@@ -91,17 +91,16 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
 
         @Override
         public void onBind(final ShopcartItem data, final int position) {
-            UserInfo userInfo = data.getUserInfo();
+            User user = data.getUser();
             Commodity commodity = data.getCommodity();
-            if (userInfo == null || commodity == null) {
+            if (user == null || commodity == null) {
                 return;
             }
-            ImageLoaderUtil.loadImage(ivUserPic, userInfo.getUserPic());
-            tvUserName.setText(userInfo.getUserName());
-            ImageLoaderUtil.loadImage(ivCommodityPic, commodity.getImage());
+            ImageUtil.loadImage(ivUserPic, user.getUserPicUrl());
+            tvUserName.setText(user.getUserName());
+            ImageUtil.loadImage(ivCommodityPic, commodity.getImageUrl());
             tvCommodityMsg.setText(commodity.getMsg());
-            tvCommodityMoney.setText(TextUtil.createPrice(commodity.getPrice()));
-
+            tvCommodityMoney.setText(PriceUtil.createPrice(commodity.getPrice()));
             cbChooseCommodity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

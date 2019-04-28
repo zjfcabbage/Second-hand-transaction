@@ -1,7 +1,5 @@
 package com.zjf.transaction.msg.model;
 
-import android.support.annotation.DrawableRes;
-
 /**
  * Created by zhengjiafeng on 2019/4/3
  *
@@ -9,16 +7,16 @@ import android.support.annotation.DrawableRes;
  */
 public class MsgItem {
     private String userName;
-    @DrawableRes private int userPicId;
+    private String userPic;
     private String newMsg;
     private long timestamp;
 
     public MsgItem() {
     }
 
-    public MsgItem(String userName, @DrawableRes int userPicId, String newMsg, long timestamp) {
+    public MsgItem(String userName, String userPicId, String newMsg, long timestamp) {
         this.userName = userName;
-        this.userPicId = userPicId;
+        this.userPic = userPicId;
         this.newMsg = newMsg;
         this.timestamp = timestamp;
     }
@@ -31,12 +29,12 @@ public class MsgItem {
         this.userName = userName;
     }
 
-    public int getUserPicId() {
-        return userPicId;
+    public String getUserPic() {
+        return userPic;
     }
 
-    public void setUserPicId(@DrawableRes int userPicId) {
-        this.userPicId = userPicId;
+    public void setUserPic(String userPic) {
+        this.userPic = userPic;
     }
 
     public String getNewMsg() {
@@ -59,7 +57,7 @@ public class MsgItem {
     public String toString() {
         return "MsgItem{" +
                 "userName='" + userName + '\'' +
-                ", userPicId=" + userPicId +
+                ", userPic=" + userPic +
                 ", newMsg='" + newMsg + '\'' +
                 ", timestamp=" + timestamp +
                 '}';

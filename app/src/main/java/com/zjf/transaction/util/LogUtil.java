@@ -13,39 +13,39 @@ public class LogUtil {
 
 
     public static void d(String format, Object... args) {
-        debug(LOGUTIL, format, args);
+        debug(format, args);
     }
 
     public static void i(String format, Object... args) {
-        info(LOGUTIL, format, args);
+        info(format, args);
     }
 
     public static void w(String format, Object... args) {
-        warn(LOGUTIL, format, args);
+        warn(format, args);
     }
 
     public static void e(String format, Object... args) {
-        error(LOGUTIL, format, args);
+        error(format, args);
     }
 
-    private static void debug(String tag, String format, Object... args) {
+    private static void debug(String format, Object... args) {
         final String msg = formatMsg(format, args);
-        Log.d(tag, msg);
+        Log.d(LogUtil.LOGUTIL, msg);
     }
 
-    private static void info(String tag, String format, Object... args) {
+    private static void info(String format, Object... args) {
         final String msg = formatMsg(format, args);
-        Log.i(tag, msg);
+        Log.i(LogUtil.LOGUTIL, msg);
     }
 
-    private static void warn(String tag, String format, Object... args) {
+    private static void warn(String format, Object... args) {
         final String msg = formatMsg(format, args);
-        Log.w(tag, msg);
+        Log.w(LogUtil.LOGUTIL, msg);
     }
 
-    private static void error(String tag, String format, Object... args) {
-        final String msg = formatMsg(tag, args);
-        Log.e(tag, msg);
+    private static void error(String format, Object... args) {
+        final String msg = formatMsg(format, args);
+        Log.e(LogUtil.LOGUTIL, msg);
     }
 
     private static String formatMsg(String format, Object... args) {

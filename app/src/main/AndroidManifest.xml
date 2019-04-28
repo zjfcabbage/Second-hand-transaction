@@ -15,11 +15,11 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".pages.commodity.CommodityActivity"></activity>
+        <activity android:name=".pages.commodity.CommodityActivity"/>
         <activity android:name=".user.RegisterActivity" />
-        <activity android:name=".user.LoginActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".SplashActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".user.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

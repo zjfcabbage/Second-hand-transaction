@@ -64,7 +64,6 @@ public class RoundImageView extends AppCompatImageView {
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        LogUtil.d("ondraw");
         if (dstBitmap == null || dstBitmap.isRecycled()) {
             dstBitmap = createDst();
         }
