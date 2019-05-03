@@ -1,7 +1,7 @@
 package com.zjf.transaction.database.entity;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
 
 @Entity(primaryKeys = {"fromId", "toId"})
 public class Msg {

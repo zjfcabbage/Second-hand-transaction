@@ -2,10 +2,12 @@ package com.zjf.transaction.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.zjf.transaction.app.AppConfig;
@@ -57,6 +59,19 @@ public class ScreenUtil {
         return height;
     }
 
+    public static int getScreenWidthInDp(Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float density = metrics.density;
+        return (int) (metrics.widthPixels / density + 0.5f);
+    }
+
+
+    public static int getScreenWidthInPx(Context context) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return metrics.widthPixels;
+    }
 
     /**
      * 沉浸式状态栏

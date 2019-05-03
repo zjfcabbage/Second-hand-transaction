@@ -1,24 +1,14 @@
 package com.zjf.transaction.user;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -27,6 +17,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.tools.PictureFileUtils;
 import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseActivity;
 import com.zjf.transaction.base.DataResult;
@@ -40,12 +35,8 @@ import com.zjf.transaction.util.ImageUtil;
 import com.zjf.transaction.util.ListUtil;
 import com.zjf.transaction.util.LogUtil;
 import com.zjf.transaction.util.ScreenUtil;
-import com.zjf.transaction.util.permission.GiveMePermission;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -59,23 +50,16 @@ import okhttp3.RequestBody;
 
 
 @SuppressLint("CheckResult")
-public class RegisterActivity extends BaseActivity implements GiveMePermission.OnRequestPermissionCallback {
+public class RegisterActivity extends BaseActivity {
 
-    public final int CODE_TAKE_PHOTO = 1;//相机RequestCode
-    public final int CODE_SELECT_PHOTO = 2;//相册RequestCode
-    public final int CODE_PERMISSION_TAKE_PHOTO_WRITE_EXTERNAL = 1; //相机和存储RequestCode
-    public final int CODE_PERMISSION_WRITE_EXTERNAL = 2; //相机和存储RequestCode
     private static final String UPLOAD_IMAGE_KEY = "image";
-
 
     private ImageView ivUserPic;
     private EditText etAccount, etPassword;
     private Spinner spinnerProvince, spinnerCity, spinnerUniversity;
     private TextView tvRegister;
-    private ViewGroup getPictureLayout;
-    private Uri photoUri;
     private String userId;
-    private Bitmap userPic;
+    private String userPic;
     private User user = new User();
     private List<Province> provinceList;
     private List<City> cityList;
@@ -90,51 +74,13 @@ public class RegisterActivity extends BaseActivity implements GiveMePermission.O
         setContentView(R.layout.activity_register);
         ScreenUtil.hideStatusBarLight(this);
 
-        userId = getRandomUserIdOnly(10);
+//        userId = getRandomUserIdOnly(10);
         LogUtil.d("user id -> %s", userId);
 
         initUserView();
         initSpinnerLayout();
-        initGetPictureLayout();
     }
 
-    private void initGetPictureLayout() {
-        getPictureLayout = findViewById(R.id.layout_get_picture);
-        final View backgroundView = getPictureLayout.findViewById(R.id.view_background);
-        final TextView tvGetPictureFromCamera = getPictureLayout.findViewById(R.id.tv_get_from_camera);
-        final TextView tvGetPictureFromPhoto = getPictureLayout.findViewById(R.id.tv_get_from_photo);
-        backgroundView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setGetPictureLayoutVisibility(View.GONE); //更改状态栏字体为深色调
-            }
-        });
-        tvGetPictureFromCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //请求相机权限和存储的权限，授权之后会跳转到onPermissionGranted和onPermissionDenied
-                GiveMePermission.with(RegisterActivity.this)
-                        .permissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE})
-                        .positiveText("确定")
-                        .negativeText("取消")
-                        .rationale(R.string.permission_rationale_text)
-                        .requestCode(CODE_PERMISSION_TAKE_PHOTO_WRITE_EXTERNAL)
-                        .request();
-            }
-        });
-        tvGetPictureFromPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GiveMePermission.with(RegisterActivity.this)
-                        .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        .positiveText("确定")
-                        .negativeText("取消")
-                        .rationale("从相册选择图片需要用到存储权限")
-                        .requestCode(CODE_PERMISSION_WRITE_EXTERNAL)
-                        .request();
-            }
-        });
-    }
 
     private void initSpinnerLayout() {
         spinnerProvince = findViewById(R.id.spinner_province);
@@ -145,6 +91,7 @@ public class RegisterActivity extends BaseActivity implements GiveMePermission.O
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                userId = getRandomUserIdOnly(10);
                 if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(etAccount.getText().toString())
                         || TextUtils.isEmpty(etPassword.getText().toString())
                         || TextUtils.isEmpty(spinnerProvince.getSelectedItem().toString())
@@ -302,8 +249,15 @@ public class RegisterActivity extends BaseActivity implements GiveMePermission.O
         ivUserPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setGetPictureLayoutVisibility(View.VISIBLE);
-                ScreenUtil.hideStatusBar(RegisterActivity.this);  //更改状态栏字体为浅色调
+                PictureSelector.create(RegisterActivity.this)
+                        .openGallery(PictureMimeType.ofImage())
+                        .previewImage(true)
+                        .enableCrop(true)
+                        .compress(true)
+                        .freeStyleCropEnabled(true)
+                        .circleDimmedLayer(true)
+                        .selectionMode(PictureConfig.SINGLE)
+                        .forResult(PictureConfig.CHOOSE_REQUEST);
             }
         });
 
@@ -343,84 +297,24 @@ public class RegisterActivity extends BaseActivity implements GiveMePermission.O
         });
     }
 
-    private Uri getMediaFileUri() {
-        File photoPath = new File(Environment.getExternalStorageDirectory(), getPackageName());
-        if (!photoPath.exists()) {
-            if (!photoPath.mkdirs()) {
-                return null;
-            }
-        }
-        final String userPicName = userId + "_IMG_" + System.currentTimeMillis() + ".jpg";
-        File photoFile = new File(photoPath, userPicName);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", photoFile);
-        } else {
-            return Uri.fromFile(photoFile);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        setGetPictureLayoutVisibility(View.GONE);
-        GiveMePermission.onRequestPermissionResult(this, requestCode, permissions, grantResults);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        setGetPictureLayoutVisibility(View.GONE);
-        if (requestCode == CODE_TAKE_PHOTO && resultCode == RESULT_OK) {
-            setUserPicFromCamera(data);
-        } else if (requestCode == CODE_SELECT_PHOTO && resultCode == RESULT_OK) {
-            setUserPicFromAlbum(data);
-        }
-    }
-
-    private void setUserPicFromAlbum(Intent data) {
-        Uri selectImageUri = data.getData();
-        if (selectImageUri == null)
-            return;
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(selectImageUri, filePathColumn, null, null, null);
-        if (cursor == null) {
-            return;
-        }
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String photoPath = cursor.getString(columnIndex);
-        cursor.close();
-        userPic = BitmapFactory.decodeFile(photoPath);
-        ImageUtil.loadImage(ivUserPic, userPic);
-    }
-
-    private void setGetPictureLayoutVisibility(int visibility) {
-        if (visibility == View.VISIBLE) {
-            getPictureLayout.setVisibility(View.VISIBLE);
-            ScreenUtil.hideStatusBarLight(this);
-        } else {
-            getPictureLayout.setVisibility(View.GONE);
-            ScreenUtil.hideStatusBar(this);
-        }
-    }
-
-    private void setUserPicFromCamera(Intent data) {
-        if (data != null) {
-            if (data.hasExtra("data")) {
-                userPic = data.getParcelableExtra("data");
-            }
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    userPic = BitmapFactory.decodeStream(getContentResolver().openInputStream(photoUri));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                userPic = BitmapFactory.decodeFile(photoUri.getPath());
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case PictureConfig.CHOOSE_REQUEST:
+                    // 图片、视频、音频选择结果回调
+                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
+                    if (!selectList.isEmpty()) {
+                        LocalMedia localMedia = selectList.get(0);
+                        LogUtil.d("path -> %s", localMedia.getPath() + " --- " + localMedia.getCutPath() + " --- " + localMedia.getCompressPath());
+                        userPic = localMedia.getCompressPath();
+                        ImageUtil.loadImage(ivUserPic, localMedia.getPath());
+//                        PictureFileUtils.deleteCacheDirFile(RegisterActivity.this);
+                    }
+                    break;
             }
         }
-        ImageUtil.loadImage(ivUserPic, userPic);
     }
 
 
@@ -430,24 +324,16 @@ public class RegisterActivity extends BaseActivity implements GiveMePermission.O
     @SuppressLint("CheckResult")
     private void uploadUserPic(final AlertDialog dialog) {
         if (userPic == null) {
+            dialog.dismiss();
             return;
         }
         final String fileName = userId + "_IMG_" + System.currentTimeMillis() + ".jpg";
-        final File userPicFile = new File(Environment.getExternalStorageDirectory() + File.separator + getPackageName(), fileName);
+        final File file = new File(userPic);
+        final File userPicFile = new File(file.getParent(), fileName);
         if (!userPicFile.exists()) {
             userPicFile.getParentFile().mkdir();
         }
-        try {
-            //图片压缩
-            FileOutputStream outputStream = new FileOutputStream(userPicFile);
-            userPic.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
-            outputStream.flush();
-            outputStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        file.renameTo(userPicFile);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), userPicFile);
         MultipartBody.Part body = MultipartBody.Part.createFormData(UPLOAD_IMAGE_KEY, fileName, requestBody);
         UserApiImpl.uploadUserPic(body).subscribeOn(Schedulers.io())
@@ -459,10 +345,12 @@ public class RegisterActivity extends BaseActivity implements GiveMePermission.O
                         UserConfig.inst().setUserPicUrl(stringDataResult.data);
                         registerSuccess = true;
                         dialog.dismiss();
+                        PictureFileUtils.deleteCacheDirFile(RegisterActivity.this);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        LogUtil.e("upload user pic failed, throwable -> %s", throwable.getMessage());
                         registerSuccess = false;
                         dialog.dismiss();
                     }
@@ -505,7 +393,7 @@ public class RegisterActivity extends BaseActivity implements GiveMePermission.O
                             LogUtil.d("user -> %s", "register success");
                             UserConfig.inst().setUser(userDataResult.data);  //将user保存到配置文件
                             uploadUserPic(dialog);  //上传用户头像
-//                            registerSuccess = true;
+                            registerSuccess = true;
                         } else {
                             LogUtil.d("user -> register failed, msg = %s", userDataResult.msg);
                             registerSuccess = false;
@@ -520,24 +408,6 @@ public class RegisterActivity extends BaseActivity implements GiveMePermission.O
                         dialog.dismiss();
                     }
                 });
-    }
-
-    @Override
-    public void onPermissionGranted(int requestCode, String[] permissions) {
-        if (requestCode == CODE_PERMISSION_TAKE_PHOTO_WRITE_EXTERNAL) { //打开相机
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            photoUri = getMediaFileUri();
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-            startActivityForResult(intent, CODE_TAKE_PHOTO);
-        } else if (requestCode == CODE_PERMISSION_WRITE_EXTERNAL) { //打开相册
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, CODE_SELECT_PHOTO);
-        }
-    }
-
-    @Override
-    public void onPermissionDenied(int requestCode, String[] deniedPermissions) {
-        Toast.makeText(this, "拒绝权限将无法正常使用此应用的部分功能", Toast.LENGTH_SHORT).show();
     }
 
     /**

@@ -1,12 +1,22 @@
 package com.zjf.transaction;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.zjf.transaction.app.AppConfig;
 import com.zjf.transaction.base.BaseActivity;
+import com.zjf.transaction.base.DataResult;
 import com.zjf.transaction.user.LoginActivity;
 import com.zjf.transaction.user.UserConfig;
+import com.zjf.transaction.user.api.impl.UserApiImpl;
+import com.zjf.transaction.user.model.User;
+import com.zjf.transaction.util.LogUtil;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by zhengjiafeng on 2019/3/12
@@ -17,12 +27,54 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //应用首次启动
+        if (AppConfig.isFirstStart()) {
+            LoginActivity.start(this, LoginActivity.class);
+            AppConfig.setFirstStart(false);
+            finish();
+            return;
+        }
+
         String account = UserConfig.inst().getUserName();
         String password = UserConfig.inst().getUserPassword();
         if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
             LoginActivity.start(this, LoginActivity.class);
         } else {
-            MainActivity.start(this, MainActivity.class);
+            tryLogin();
         }
+    }
+    @SuppressLint("CheckResult")
+    private void tryLogin() {
+        final long fiveDayTime = 5 * 24 * 60 * 60 * 1000;
+        if (UserConfig.inst().getLastLoginTime() - System.currentTimeMillis() > fiveDayTime) {
+            LoginActivity.start(this, LoginActivity.class);
+            finish();
+            return;
+        }
+        final String userName = UserConfig.inst().getUserName();
+        final String password = UserConfig.inst().getUserPassword();
+        UserApiImpl.login(userName, password)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<DataResult<User>>() {
+                    @Override
+                    public void accept(DataResult<User> userDataResult) throws Exception {
+                        if (userDataResult.code == DataResult.CODE_SUCCESS) {
+                            if (userDataResult.data != null) {
+                                LogUtil.d("login success");
+                                MainActivity.start(SplashActivity.this, MainActivity.class);
+                            } else {
+                                LoginActivity.start(SplashActivity.this, LoginActivity.class);
+                                LogUtil.e("login failed, msg -> %s", userDataResult.msg);
+                            }
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtil.e("login failed, throwable -> %s", throwable.getMessage());
+                    }
+                });
     }
 }

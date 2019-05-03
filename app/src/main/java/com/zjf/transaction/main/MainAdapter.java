@@ -1,7 +1,7 @@
 package com.zjf.transaction.main;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +42,8 @@ public class MainAdapter extends BaseAdapter<Commodity> {
 
         @Override
         public void onBind(Commodity data, int position) {
-            ImageUtil.loadImage(ivCommodity, data.getImageUrl());
+            ImageUtil.loadImage(ivCommodity, data.getImageUrls().get(0));
+//            ImageUtil.loadImage(ivUserPic,);
             tvCommodity.setText(data.getMsg());
             tvRMB.setText(PriceUtil.createPrice(data.getPrice()));
         }
@@ -55,7 +56,6 @@ public class MainAdapter extends BaseAdapter<Commodity> {
             tvCommodity = msgLayout.findViewById(R.id.tv_commodity);
             tvRMB = msgLayout.findViewById(R.id.tv_RMB);
             ivAddToShopcart = msgLayout.findViewById(R.id.iv_add_shopcart);
-            ImageUtil.loadImage(ivUserPic, R.drawable.cat);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

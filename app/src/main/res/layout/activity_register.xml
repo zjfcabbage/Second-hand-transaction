@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -102,51 +102,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spinner_university" />
 
-    <LinearLayout
-        android:id="@+id/layout_get_picture"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone">
-
-        <View
-            android:id="@+id/view_background"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:alpha="0.7"
-            android:background="@color/color_black" />
-
-        <TextView
-            android:id="@+id/tv_get_from_camera"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/color_white"
-            android:gravity="center"
-            android:text="@string/get_picture_from_camera"
-            android:textColor="@color/colorAccent"
-            android:textSize="18sp"
-            android:theme="@style/BoldText" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/color_CACACA" />
-
-        <TextView
-            android:id="@+id/tv_get_from_photo"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/color_white"
-            android:gravity="center"
-            android:text="@string/get_picture_from_photo"
-            android:textColor="@color/colorAccent"
-            android:textSize="18sp"
-            android:theme="@style/BoldText" />
-    </LinearLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

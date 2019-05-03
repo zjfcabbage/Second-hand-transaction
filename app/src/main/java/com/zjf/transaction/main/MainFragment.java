@@ -1,24 +1,35 @@
 package com.zjf.transaction.main;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseAdapter;
 import com.zjf.transaction.base.BaseFragment;
+import com.zjf.transaction.base.DataResult;
+import com.zjf.transaction.main.api.impl.MainApiImpl;
 import com.zjf.transaction.main.model.Commodity;
+import com.zjf.transaction.util.LogUtil;
 import com.zjf.transaction.util.ScreenUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by zhengjiafeng on 2019/3/13
@@ -27,11 +38,16 @@ import java.util.List;
  */
 public class MainFragment extends BaseFragment {
 
+    private static final int DEFAULT_PAGE_NUM = 0;
+
     private List<Commodity> commodityList = new ArrayList<>();
     private RecyclerView recyclerView;
     private BaseAdapter<Commodity> adapter;
     private StaggeredGridLayoutManager manager;
     private ViewGroup searchLayout;
+    private RefreshLayout refreshLayout;
+    private Disposable disposable;
+    private int pageNum = DEFAULT_PAGE_NUM;
 
     @Override
     public View onCreateContent(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,7 +65,67 @@ public class MainFragment extends BaseFragment {
         ivPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2019/4/3 发布商品
+                PublishActivity.start(getContext(), PublishActivity.class);
+            }
+        });
+
+        refreshLayout = view.findViewById(R.id.layout_refresh);
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@androidx.annotation.NonNull final RefreshLayout refreshLayout) {
+                MainApiImpl.getAllCommodity(DEFAULT_PAGE_NUM)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<DataResult<List<Commodity>>>() {
+                            @Override
+                            public void accept(DataResult<List<Commodity>> listDataResult) throws Exception {
+                                if (listDataResult.code == DataResult.CODE_SUCCESS) {
+                                    LogUtil.d("refresh success");
+                                    adapter.setDataList(listDataResult.data);
+                                    adapter.notifyDataSetChanged();
+                                    pageNum = DEFAULT_PAGE_NUM;
+                                    refreshLayout.finishRefresh(true);
+                                } else {
+                                    LogUtil.e("refresh failed, msg -> %s", listDataResult.msg);
+                                    refreshLayout.finishRefresh(false);
+                                }
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                LogUtil.e("refresh failed, throwable -> %s", throwable.getMessage());
+                                refreshLayout.finishRefresh(false);
+                            }
+                        });
+            }
+        });
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@androidx.annotation.NonNull final RefreshLayout refreshLayout) {
+                MainApiImpl.getAllCommodity(pageNum + 1)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<DataResult<List<Commodity>>>() {
+                            @Override
+                            public void accept(DataResult<List<Commodity>> listDataResult) throws Exception {
+                                if (listDataResult.code == DataResult.CODE_SUCCESS) {
+                                    LogUtil.d("load more success");
+                                    adapter.appendDataList(listDataResult.data);
+                                    adapter.notifyDataSetChanged();
+                                    pageNum++;
+                                    refreshLayout.finishLoadMore(true);
+                                } else {
+                                    LogUtil.e("load more failed, msg -> %s", listDataResult.msg);
+                                    refreshLayout.finishLoadMore(false);
+                                }
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                LogUtil.e("load more failed, thrwoable -> %s", throwable.getMessage());
+                                refreshLayout.finishLoadMore(false);
+                            }
+                        });
             }
         });
 
@@ -65,12 +141,38 @@ public class MainFragment extends BaseFragment {
     }
 
     private void init() {
+        List<String> list = new ArrayList<>();
+        list.add("");
         for (int i = 0; i < 10; i++) {
             Commodity commodity = new Commodity();
-            commodity.setImageUrl(null);
+            commodity.setImageUrls(list);
             commodity.setMsg("竹鼠一只三块，三只十块，傻逼的快来买");
             commodity.setPrice(1900);
             commodityList.add(commodity);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        if (disposable == null) {
+//            disposable = MainApiImpl.getAllCommodity(DEFAULT_PAGE_NUM)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(new Consumer<DataResult<List<Commodity>>>() {
+//                        @Override
+//                        public void accept(DataResult<List<Commodity>> listDataResult) throws Exception {
+//                            if (listDataResult.code == DataResult.CODE_SUCCESS) {
+//                                adapter.setDataList(listDataResult.data);
+//                                adapter.notifyDataSetChanged();
+//                            }
+//                        }
+//                    }, new Consumer<Throwable>() {
+//                        @Override
+//                        public void accept(Throwable throwable) throws Exception {
+//                            LogUtil.e("throwable -> %s", throwable.getMessage());
+//                        }
+//                    });
+//        }
     }
 }

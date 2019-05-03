@@ -1,7 +1,7 @@
 package com.zjf.transaction.pages.commodity;
 
 import android.os.Bundle;
-import android.support.v4.widget.NestedScrollView;
+import androidx.core.widget.NestedScrollView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;

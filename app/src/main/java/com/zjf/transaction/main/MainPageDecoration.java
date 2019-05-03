@@ -1,8 +1,8 @@
 package com.zjf.transaction.main;
 
 import android.graphics.Rect;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.zjf.transaction.app.AppConfig;
@@ -26,16 +26,19 @@ public class MainPageDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(view);
+        int width = ScreenUtil.dp2px(parent.getContext(), 180);
+        int screenWidth = ScreenUtil.getScreenWidthInPx(parent.getContext());
+        int averageWidth = (screenWidth - 2 * width) / 3;
         if (position % 2 == 0) {
             //view在第一列
-            outRect.left = parent.getPaddingLeft() + padding;
-            outRect.right = padding / 2;
+            outRect.left = averageWidth;
+//            outRect.right = averageWidth / 2;
         } else if (position % 2 == 1){
-            //view在第二列
-            outRect.left = padding /2;
-            outRect.right = parent.getPaddingRight() + padding;
+//            //view在第二列
+            outRect.left = averageWidth;
+//            outRect.right = parent.getPaddingRight() + averageWidth;
         }
-        outRect.top = padding / 2;
-        outRect.bottom = padding / 2;
+        outRect.top = averageWidth;
+        outRect.bottom = averageWidth;
     }
 }

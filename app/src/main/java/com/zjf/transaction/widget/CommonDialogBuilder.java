@@ -2,7 +2,7 @@ package com.zjf.transaction.widget;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;

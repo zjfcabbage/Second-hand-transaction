@@ -1,10 +1,10 @@
 package com.zjf.transaction.shopcart;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +51,7 @@ public class ShopcartFragment extends BaseFragment {
         shopcartItemList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             User user = new User("傻逼", null, "广东", "深圳", "傻逼大学");
-            Commodity commodity = new Commodity("0", null, "竹鼠一只三块，三只十块，傻逼的快来买", 1999, 0);
+            Commodity commodity = new Commodity("0", "0",null, "竹鼠一只三块，三只十块，傻逼的快来买", 1999, 0);
             shopcartItemList.add(new ShopcartItem(user, commodity));
         }
     }

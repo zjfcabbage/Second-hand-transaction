@@ -1,13 +1,11 @@
 package com.zjf.transaction;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.FragmentTransaction;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.zjf.transaction.base.BaseActivity;
 import com.zjf.transaction.base.BaseFragment;

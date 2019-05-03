@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/layout_title"
+        layout="@layout/layout_common_title_bar" />
+
+    <EditText
+        android:id="@+id/et_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:gravity="start|top"
+        android:hint="描述宝贝的转手原因、入手渠道和使用感受"
+        android:lineSpacingExtra="3dp"
+        android:lines="20"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColor="@color/color_303030"
+        android:textColorHint="@color/color_CACACA"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/view_1"
+        app:layout_constraintTop_toBottomOf="@id/layout_title" />
+
+    <View
+        android:id="@+id/view_1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/color_CACACA"
+        app:layout_constraintBottom_toTopOf="@id/layout_price" />
+
+    <LinearLayout
+        android:id="@+id/layout_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/view_2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="价格："
+            android:textColor="@color/color_303030"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/et_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:textColor="@color/color_303030"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_2"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/color_CACACA"
+        app:layout_constraintBottom_toTopOf="@id/layout_pic" />
+
+    <LinearLayout
+        android:id="@+id/layout_pic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@id/btn_publish"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@color/color_F3F5F9"
+            android:scaleType="center"
+            android:src="@drawable/icon_add_pic"
+            app:layout_constraintBottom_toTopOf="@id/btn_publish"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+    </LinearLayout>
+
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_1"-->
+    <!--android:layout_width="80dp"-->
+    <!--android:layout_height="80dp"-->
+    <!--android:layout_margin="10dp"-->
+    <!--android:background="@color/color_F3F5F9"-->
+    <!--android:scaleType="center"-->
+    <!--android:src="@drawable/icon_add_pic"-->
+    <!--app:layout_constraintBottom_toTopOf="@id/btn_publish"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent" />-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_2"-->
+    <!--android:layout_width="80dp"-->
+    <!--android:layout_height="80dp"-->
+    <!--android:layout_margin="10dp"-->
+    <!--android:layout_marginStart="-10dp"-->
+    <!--android:scaleType="center"-->
+    <!--app:layout_constraintBottom_toTopOf="@id/btn_publish"-->
+    <!--app:layout_constraintLeft_toRightOf="@id/iv_1" />-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_3"-->
+    <!--android:layout_width="80dp"-->
+    <!--android:layout_height="80dp"-->
+    <!--android:layout_margin="10dp"-->
+    <!--android:layout_marginStart="-10dp"-->
+    <!--android:scaleType="center"-->
+    <!--app:layout_constraintBottom_toTopOf="@id/btn_publish"-->
+    <!--app:layout_constraintLeft_toRightOf="@id/iv_2" />-->
+
+    <Button
+        android:id="@+id/btn_publish"
+        style="@style/common_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="18dp"
+        android:text="确认发布"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

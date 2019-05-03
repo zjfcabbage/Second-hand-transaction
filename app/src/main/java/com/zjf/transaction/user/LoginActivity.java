@@ -1,11 +1,9 @@
 package com.zjf.transaction.user;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,6 +16,7 @@ import com.zjf.transaction.user.api.impl.UserApiImpl;
 import com.zjf.transaction.user.model.User;
 import com.zjf.transaction.util.LogUtil;
 
+import androidx.appcompat.app.AlertDialog;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -47,7 +46,7 @@ public class LoginActivity extends BaseActivity {
                 String activity = bundle.getString("activity");
                 User user = bundle.getParcelable("user");
                 if ("RegisterActivity".equalsIgnoreCase(activity) && user != null) {
-                    login(user);
+                    login(user.getUserName(), user.getPassword());
                 }
             }
         }
@@ -55,10 +54,8 @@ public class LoginActivity extends BaseActivity {
 
     /**
      * 登录
-     *
-     * @param user 用户对象
      */
-    private void login(final User user) {
+    private void login(String userName, String password) {
         dialog = new AlertDialog.Builder(LoginActivity.this)
                 .setCancelable(false)
                 .setView(R.layout.layout_logining)
@@ -75,7 +72,7 @@ public class LoginActivity extends BaseActivity {
                 })
                 .create();
         dialog.show();
-        UserApiImpl.login(user.getUserName(), user.getPassword())
+        UserApiImpl.login(userName, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<DataResult<User>>() {
@@ -92,8 +89,11 @@ public class LoginActivity extends BaseActivity {
                                 userConfig.setUserId(currentUser.getUserId());
                                 userConfig.setUserPicUrl(currentUser.getUserPicUrl());
                                 userConfig.setUser(currentUser);
+                                userConfig.setLastLoginTime(System.currentTimeMillis());
+                                loginSuccess = true;
+                            } else {
+                                loginSuccess = false;
                             }
-                            loginSuccess = true;
                         } else {
                             LogUtil.d("login error, msg -> %s", userDataResult.msg);
                         }
@@ -116,10 +116,7 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View v) {
                 final String account = etAccount.getText().toString();
                 final String password = etPassword.getText().toString();
-                final User user = new User();
-                user.setUserName(account);
-                user.setPassword(password);
-                login(user);
+                login(account, password);
             }
         });
         findViewById(R.id.tv_no_account).setOnClickListener(new View.OnClickListener() {

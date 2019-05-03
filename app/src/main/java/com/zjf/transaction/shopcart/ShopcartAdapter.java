@@ -1,7 +1,7 @@
 package com.zjf.transaction.shopcart;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +98,7 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
             }
             ImageUtil.loadImage(ivUserPic, user.getUserPicUrl());
             tvUserName.setText(user.getUserName());
-            ImageUtil.loadImage(ivCommodityPic, commodity.getImageUrl());
+            ImageUtil.loadImage(ivCommodityPic, commodity.getImageUrls().get(0));
             tvCommodityMsg.setText(commodity.getMsg());
             tvCommodityMoney.setText(PriceUtil.createPrice(commodity.getPrice()));
             cbChooseCommodity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
