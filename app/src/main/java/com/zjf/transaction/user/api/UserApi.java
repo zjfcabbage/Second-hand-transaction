@@ -30,14 +30,13 @@ public interface UserApi {
     @PUT("/user/update/userName")
     Single<DataResult<String>> updateUserName(@Field("userName") String userName, @Field("userId") String userId);
 
-    @Multipart
-    @POST("/user/add/pic/")
-    Single<DataResult<String>> uploadUserPic(@Part MultipartBody.Part userPic);
-
     @FormUrlEncoded
     @POST("/user/login/")
     Single<DataResult<User>> login(@Field("userName") String userName, @Field("password") String password);
 
     @GET("/user/exist/")
     Single<DataResult<String>> isUserNameExisted(@Query("userName") String userName);
+
+    @PUT("/user/update/image")
+    Single<DataResult<String>> updateUserPicUrl(@Query("userId") String userId, @Query("userPicUrl") String userPicUrl);
 }

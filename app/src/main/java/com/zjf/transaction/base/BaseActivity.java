@@ -1,12 +1,17 @@
 package com.zjf.transaction.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.zjf.transaction.app.AppConfig;
+import com.zjf.transaction.user.LoginActivity;
 import com.zjf.transaction.util.LogUtil;
+
+import java.util.ArrayList;
 
 /**
  * Created by zjfcabbage on 2019/2/4
@@ -15,10 +20,12 @@ import com.zjf.transaction.util.LogUtil;
  */
 public class BaseActivity extends AppCompatActivity {
     public static final String KEY_BUNDLE = "key_bundle";
+    private static ArrayList<Activity> arrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        arrayList.add(this);
         LogUtil.d("=== onCreate : %s ===", getLocalClassName());
     }
 
@@ -49,6 +56,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        arrayList.remove(this);
         LogUtil.d("=== onDestroy : %s ===", getLocalClassName());
     }
 
@@ -73,5 +81,16 @@ public class BaseActivity extends AppCompatActivity {
         Intent intent = new Intent(context, clazz);
         intent.putExtra(KEY_BUNDLE, bundle);
         context.startActivity(intent);
+    }
+
+    public static void logout() {
+        if (arrayList.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < arrayList.size(); i++) {
+            arrayList.get(i).finish();
+        }
+        arrayList.clear();
+        start(AppConfig.context(), LoginActivity.class);
     }
 }

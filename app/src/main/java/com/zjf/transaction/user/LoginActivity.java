@@ -80,6 +80,7 @@ public class LoginActivity extends BaseActivity {
                         if (userDataResult.code == DataResult.CODE_SUCCESS) {
                             final User currentUser = userDataResult.data;
                             if (currentUser != null) {
+                                LogUtil.d(currentUser.toString());
                                 userConfig.setUserName(currentUser.getUserName());
                                 userConfig.setUserPassword(currentUser.getPassword());
                                 userConfig.setUserProvince(currentUser.getProvince());

@@ -27,15 +27,15 @@ public class UserApiImpl {
         return userApi.updateUserName(userName, userId);
     }
 
-    public static Single<DataResult<String>> uploadUserPic(MultipartBody.Part file) {
-        return userApi.uploadUserPic(file);
-    }
-
     public static Single<DataResult<User>> login(String userName, String password) {
         return userApi.login(userName, password);
     }
 
     public static Single<DataResult<String>> isUserNameExisted(String userName) {
         return userApi.isUserNameExisted(userName);
+    }
+
+    public static Single<DataResult<String>> updateUserPicUrl(String userId, String userPicUrl) {
+        return userApi.updateUserPicUrl(userId, userPicUrl);
     }
 }

@@ -21,4 +21,5 @@
     <string name="string_permission_setting">权限设置</string>
     <string name="i_want_to_publish">我要发布</string>
     <string name="i_want_it">我想要</string>
+    <string name="logout">注销</string>
 </resources>

@@ -2,7 +2,9 @@ package com.zjf.transaction;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
+
 import android.text.TextUtils;
 
 import com.zjf.transaction.app.AppConfig;
@@ -44,6 +46,7 @@ public class SplashActivity extends BaseActivity {
             tryLogin();
         }
     }
+
     @SuppressLint("CheckResult")
     private void tryLogin() {
         final long fiveDayTime = 5 * 24 * 60 * 60 * 1000;
@@ -62,6 +65,17 @@ public class SplashActivity extends BaseActivity {
                     public void accept(DataResult<User> userDataResult) throws Exception {
                         if (userDataResult.code == DataResult.CODE_SUCCESS) {
                             if (userDataResult.data != null) {
+                                final User currentUser = userDataResult.data;
+                                LogUtil.d("splashActivity -> %s", currentUser.toString());
+                                UserConfig.inst().setUserName(currentUser.getUserName());
+                                UserConfig.inst().setUserPassword(currentUser.getPassword());
+                                UserConfig.inst().setUserProvince(currentUser.getProvince());
+                                UserConfig.inst().setUserCity(currentUser.getCity());
+                                UserConfig.inst().setUserUniversity(currentUser.getUniversity());
+                                UserConfig.inst().setUserId(currentUser.getUserId());
+                                UserConfig.inst().setUserPicUrl(currentUser.getUserPicUrl());
+                                UserConfig.inst().setUser(currentUser);
+                                UserConfig.inst().setLastLoginTime(System.currentTimeMillis());
                                 LogUtil.d("login success");
                                 MainActivity.start(SplashActivity.this, MainActivity.class);
                             } else {

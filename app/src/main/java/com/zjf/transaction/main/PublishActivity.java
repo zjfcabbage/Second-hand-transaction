@@ -26,6 +26,7 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.tools.PictureFileUtils;
 import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseActivity;
 import com.zjf.transaction.base.DataResult;
@@ -142,6 +143,7 @@ public class PublishActivity extends BaseActivity {
                                             LogUtil.d("publish success");
                                             isPublishSuccess = true;
                                             dialog.dismiss();
+                                            PictureFileUtils.deleteCacheDirFile(PublishActivity.this);//清理掉选择图片的缓存
                                         } else {
                                             LogUtil.e("publish failed, msg -> %s", stringDataResult.msg);
                                             isPublishSuccess = false;

@@ -37,19 +37,13 @@ import com.zjf.transaction.util.LogUtil;
 import com.zjf.transaction.util.qiniu.QiNiuUtil;
 import com.zjf.transaction.util.ScreenUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 
 @SuppressLint("CheckResult")
@@ -345,7 +339,7 @@ public class RegisterActivity extends BaseActivity {
                 })
                 .create();
         dialog.show();
-        QiNiuUtil.upLoadImage(userPic, userId, new QiNiuUtil.ActionListener() {
+        QiNiuUtil.upLoadImageWithSimpleToken(userPic, userId, new QiNiuUtil.ActionListener() {
             @Override
             public void success(String url) {
                 PictureFileUtils.deleteCacheDirFile(RegisterActivity.this);

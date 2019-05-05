@@ -28,7 +28,7 @@ public class QiNiuUtil {
         void success(String url);
     }
 
-    public static void upLoadImage(final String filePath, final String key, final ActionListener actionListener) {
+    public static void upLoadImageWithSimpleToken(final String filePath, final String key, final ActionListener actionListener) {
         HttpFactory.getApi(ImageApi.class)
                 .getSimpleToken()
                 .subscribeOn(Schedulers.io())
@@ -38,7 +38,8 @@ public class QiNiuUtil {
                     public void accept(DataResult<String> stringDataResult) throws Exception {
                         if (stringDataResult.code == DataResult.CODE_SUCCESS) {
                             LogUtil.d("get simple token success");
-                            AppConfig.getUploadManager().put(filePath, key, stringDataResult.data, new UpCompletionHandler() {
+                            String fileName = key + System.currentTimeMillis();
+                            AppConfig.getUploadManager().put(filePath, fileName, stringDataResult.data, new UpCompletionHandler() {
                                 @Override
                                 public void complete(String key, ResponseInfo info, JSONObject response) {
                                     Uri uri = new Uri.Builder()
