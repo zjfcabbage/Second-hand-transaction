@@ -14,19 +14,19 @@ public class Commodity {
     private String id; //商品id应该用用户名和时间戳保证唯一性
     @SerializedName("userId")
     private String userId;
-    @SerializedName("image_url")
-    private List<String> imageUrls;  //用@@@来分隔每个url
+    @SerializedName("imageUrl")
+    private String imageUrls;  //用@@@来分隔每个url
     @SerializedName("msg")
     private String msg;
     @SerializedName("price")
-    private float price;
+    private String price;
     @SerializedName("publishTime")
     private long publishTime;
 
     public Commodity() {
     }
 
-    public Commodity(String id, String userId, List<String> imageUrl, String msg, float price, long publishTime) {
+    public Commodity(String id, String userId, String imageUrl, String msg, String price, long publishTime) {
         this.id = id;
         this.userId = userId;
         this.imageUrls = imageUrl;
@@ -59,19 +59,19 @@ public class Commodity {
         this.msg = msg;
     }
 
-    public float getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public List<String> getImageUrls() {
+    public String getImageUrls() {
         return imageUrls;
     }
 
-    public void setImageUrls(List<String> imageUrls) {
+    public void setImageUrls(String imageUrls) {
         this.imageUrls = imageUrls;
     }
 

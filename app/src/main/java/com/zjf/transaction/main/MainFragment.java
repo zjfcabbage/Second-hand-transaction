@@ -141,13 +141,11 @@ public class MainFragment extends BaseFragment {
     }
 
     private void init() {
-        List<String> list = new ArrayList<>();
-        list.add("");
         for (int i = 0; i < 10; i++) {
             Commodity commodity = new Commodity();
-            commodity.setImageUrls(list);
+            commodity.setImageUrls(null);
             commodity.setMsg("竹鼠一只三块，三只十块，傻逼的快来买");
-            commodity.setPrice(1900);
+            commodity.setPrice("1900");
             commodityList.add(commodity);
         }
     }

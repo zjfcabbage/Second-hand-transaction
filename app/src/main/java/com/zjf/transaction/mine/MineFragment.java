@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseFragment;
+import com.zjf.transaction.user.UserConfig;
+import com.zjf.transaction.util.ImageUtil;
 import com.zjf.transaction.widget.RoundImageView;
 
 /**
@@ -20,6 +22,7 @@ import com.zjf.transaction.widget.RoundImageView;
 public class MineFragment extends BaseFragment {
 
     private ViewGroup userInfoLayout, publishLayout;
+    private UserConfig userConfig = UserConfig.inst();
 
     @Override
     public View onCreateContent(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,8 +48,10 @@ public class MineFragment extends BaseFragment {
         final TextView tvUserName = userInfoLayout.findViewById(R.id.tv_user_name);
         final TextView tvProvinceAndCity = userInfoLayout.findViewById(R.id.tv_province_city);
         final TextView tvUniversity = userInfoLayout.findViewById(R.id.tv_university);
-        // TODO: 2019/4/5 更新用户信息
+
+        ImageUtil.loadImage(ivUserPic, userConfig.getUserPicUrl());
+        tvUserName.setText(userConfig.getUserName());
+        tvProvinceAndCity.setText(userConfig.getUserProvince() + userConfig.getUserCity());
+        tvUniversity.setText(userConfig.getUserUniversity());
     }
-
-
 }

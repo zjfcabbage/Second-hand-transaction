@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import android.text.TextUtils;
@@ -34,6 +34,7 @@ import com.zjf.transaction.user.model.User;
 import com.zjf.transaction.util.ImageUtil;
 import com.zjf.transaction.util.ListUtil;
 import com.zjf.transaction.util.LogUtil;
+import com.zjf.transaction.util.qiniu.QiNiuUtil;
 import com.zjf.transaction.util.ScreenUtil;
 
 import java.io.File;
@@ -41,8 +42,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -317,54 +320,12 @@ public class RegisterActivity extends BaseActivity {
         }
     }
 
-
-    /**
-     * 将用户的图片保存到数据库和服务器
-     */
-    @SuppressLint("CheckResult")
-    private void uploadUserPic(final AlertDialog dialog) {
-        if (userPic == null) {
-            dialog.dismiss();
-            return;
-        }
-        final String fileName = userId + "_IMG_" + System.currentTimeMillis() + ".jpg";
-        final File file = new File(userPic);
-        final File userPicFile = new File(file.getParent(), fileName);
-        if (!userPicFile.exists()) {
-            userPicFile.getParentFile().mkdir();
-        }
-        file.renameTo(userPicFile);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), userPicFile);
-        MultipartBody.Part body = MultipartBody.Part.createFormData(UPLOAD_IMAGE_KEY, fileName, requestBody);
-        UserApiImpl.uploadUserPic(body).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DataResult<String>>() {
-                    @Override
-                    public void accept(DataResult<String> stringDataResult) throws Exception {
-                        LogUtil.d("upload user pic success");
-                        UserConfig.inst().setUserPicUrl(stringDataResult.data);
-                        registerSuccess = true;
-                        dialog.dismiss();
-                        PictureFileUtils.deleteCacheDirFile(RegisterActivity.this);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        LogUtil.e("upload user pic failed, throwable -> %s", throwable.getMessage());
-                        registerSuccess = false;
-                        dialog.dismiss();
-                    }
-                });
-    }
-
     @SuppressLint("CheckResult")
     private void register() {
         if (user == null || userNameExist) {
             return;
         }
-        LogUtil.d(user.toString());
         final AlertDialog dialog = new AlertDialog.Builder(RegisterActivity.this)
-                .setCancelable(false)
                 .setView(R.layout.layout_logining)
                 .setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
@@ -384,30 +345,39 @@ public class RegisterActivity extends BaseActivity {
                 })
                 .create();
         dialog.show();
-        UserApiImpl.register(user)
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<DataResult<User>>() {
-                    @Override
-                    public void accept(DataResult<User> userDataResult) throws Exception {
-                        if (userDataResult.code == DataResult.CODE_SUCCESS) {
-                            LogUtil.d("user -> %s", "register success");
-                            UserConfig.inst().setUser(userDataResult.data);  //将user保存到配置文件
-                            uploadUserPic(dialog);  //上传用户头像
-                            registerSuccess = true;
-                        } else {
-                            LogUtil.d("user -> register failed, msg = %s", userDataResult.msg);
-                            registerSuccess = false;
-                            dialog.dismiss();
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        LogUtil.e(throwable.getMessage());
-                        registerSuccess = false;
-                        dialog.dismiss();
-                    }
-                });
+        QiNiuUtil.upLoadImage(userPic, userId, new QiNiuUtil.ActionListener() {
+            @Override
+            public void success(String url) {
+                PictureFileUtils.deleteCacheDirFile(RegisterActivity.this);
+                user.setUserPicUrl(url);
+                LogUtil.d(user.toString());
+                UserApiImpl.register(user)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<DataResult<User>>() {
+                            @Override
+                            public void accept(DataResult<User> userDataResult) throws Exception {
+                                if (userDataResult.code == DataResult.CODE_SUCCESS) {
+                                    LogUtil.d("user -> %s", "register success");
+                                    UserConfig.inst().setUser(userDataResult.data);  //将user保存到配置文件
+                                    registerSuccess = true;
+                                    dialog.dismiss();
+                                } else {
+                                    LogUtil.d("user -> register failed, msg = %s", userDataResult.msg);
+                                    registerSuccess = false;
+                                    dialog.dismiss();
+                                }
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                LogUtil.e(throwable.getMessage());
+                                registerSuccess = false;
+                                dialog.dismiss();
+                            }
+                        });
+            }
+        });
     }
 
     /**

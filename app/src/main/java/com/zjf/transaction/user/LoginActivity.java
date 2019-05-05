@@ -57,7 +57,6 @@ public class LoginActivity extends BaseActivity {
      */
     private void login(String userName, String password) {
         dialog = new AlertDialog.Builder(LoginActivity.this)
-                .setCancelable(false)
                 .setView(R.layout.layout_logining)
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override

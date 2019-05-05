@@ -42,7 +42,7 @@ public class MainAdapter extends BaseAdapter<Commodity> {
 
         @Override
         public void onBind(Commodity data, int position) {
-            ImageUtil.loadImage(ivCommodity, data.getImageUrls().get(0));
+            ImageUtil.loadImage(ivCommodity, data.getImageUrls());
 //            ImageUtil.loadImage(ivUserPic,);
             tvCommodity.setText(data.getMsg());
             tvRMB.setText(PriceUtil.createPrice(data.getPrice()));

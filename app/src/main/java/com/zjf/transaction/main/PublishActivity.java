@@ -2,10 +2,14 @@ package com.zjf.transaction.main;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
+import android.util.Pair;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.View;
@@ -31,6 +35,7 @@ import com.zjf.transaction.user.UserConfig;
 import com.zjf.transaction.util.ImageUtil;
 import com.zjf.transaction.util.LogUtil;
 import com.zjf.transaction.util.ScreenUtil;
+import com.zjf.transaction.util.qiniu.QiNiuUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,15 +53,12 @@ import okhttp3.RequestBody;
 public class PublishActivity extends BaseActivity {
 
     private static final int PIC_COUNT = 4;
-    private static final String UPLOAD_IMAGE_KEY = "image";
     private ViewGroup picLayout;
     private EditText etMsg, etPrice;
     private ImageView ivMore;
     private Button btnPublish;
 
-//    private SparseArray<Pair<String, String>> picSparseArray = new SparseArray<>(PIC_COUNT);
-    private SparseArray<FrameLayout> picLayoutArray = new SparseArray<>(PIC_COUNT);
-    private SparseArray<String> picArray = new SparseArray<>(PIC_COUNT);
+    private SparseArray<Pair<String, String>> picSparseArray = new SparseArray<>(PIC_COUNT);
     private boolean isPublishSuccess;
     private AlertDialog dialog;
 
@@ -68,7 +70,6 @@ public class PublishActivity extends BaseActivity {
 
         initView();
         dialog = new AlertDialog.Builder(PublishActivity.this)
-                .setCancelable(false)
                 .setView(R.layout.layout_logining)
                 .setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
@@ -78,7 +79,7 @@ public class PublishActivity extends BaseActivity {
                             finish();
                         } else {
                             Toast.makeText(PublishActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
-                            finish();
+//                            finish();
                         }
                     }
                 })
@@ -108,64 +109,53 @@ public class PublishActivity extends BaseActivity {
         btnPublish = findViewById(R.id.btn_publish);
         btnPublish.setOnClickListener(new View.OnClickListener() {
 
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                dialog.show();
                 final String userId = UserConfig.inst().getUserId();
                 final long publishTime = System.currentTimeMillis();
-                final String id = userId + "--" + publishTime;
+                final String id = userId + "_" + publishTime;
                 final String msg = etMsg.getText().toString();
                 final String priceString = etPrice.getText().toString();
-                if (msg.isEmpty() || priceString.isEmpty() || picArray.size() == 0) {
+                if (msg.isEmpty() || priceString.isEmpty() || picSparseArray.size() == 0) {
                     Toast.makeText(PublishActivity.this, "请完善所有内容再发布", Toast.LENGTH_SHORT).show();
+//                    dialog.dismiss();
                     return;
                 }
-                float price = 0;
-                try {
-                    price = Float.valueOf(priceString);
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
+                dialog.show();
+                final ArrayList<Pair<String, String>> picList = new ArrayList<>();
+                for (int i = 0; i < picSparseArray.size(); i++) {
+                    picList.add(picSparseArray.get(i));
                 }
-                final List<MultipartBody.Part> pics = new ArrayList<>();
-                for (int i = 0; i < picArray.size(); i++) {
-                    final String compressPath = picArray.get(i);
-                    File file = new File(compressPath);
-                    RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                    MultipartBody.Part part = MultipartBody.Part.createFormData(UPLOAD_IMAGE_KEY, file.getName(), requestBody);
-                    pics.add(part);
-                }
-                final Commodity commodity = new Commodity(id, userId, null, msg, price, publishTime);
-                LogUtil.d(new Gson().toJson(commodity));
-                MainApiImpl.publish(commodity)
-                        .flatMap(new Function<DataResult<String>, SingleSource<DataResult<String>>>() {
-                            @Override
-                            public SingleSource<DataResult<String>> apply(DataResult<String> stringDataResult) throws Exception {
-                                if (stringDataResult.code == DataResult.CODE_SUCCESS) {
-                                    LogUtil.d("upload info success");
-                                    LogUtil.d("user id -> %s", userId);
-                                    return MainApiImpl.upload(id, pics);
-                                }
-                                LogUtil.d("upload info failed, code -> %d", stringDataResult.code);
-                                return null;
-                            }
-                        })
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DataResult<String>>() {
+                QiNiuUtil.uploadImageList(picList, new QiNiuUtil.ActionListener() {
                     @Override
-                    public void accept(DataResult<String> stringDataResult) throws Exception {
-                        if (stringDataResult.code == DataResult.CODE_SUCCESS) {
-                            LogUtil.d("publish success");
-                            isPublishSuccess = true;
-                            dialog.dismiss();
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        LogUtil.e("publish failed, throwable -> %s", throwable.getMessage());
-                        isPublishSuccess = false;
-                        dialog.dismiss();
+                    public void success(String url) {
+                        final Commodity commodity = new Commodity(id, userId, url, msg, priceString, publishTime);
+                        LogUtil.d(commodity.toString());
+                        MainApiImpl.publish(commodity)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<DataResult<String>>() {
+                                    @Override
+                                    public void accept(DataResult<String> stringDataResult) throws Exception {
+                                        if (stringDataResult.code == DataResult.CODE_SUCCESS) {
+                                            LogUtil.d("publish success");
+                                            isPublishSuccess = true;
+                                            dialog.dismiss();
+                                        } else {
+                                            LogUtil.e("publish failed, msg -> %s", stringDataResult.msg);
+                                            isPublishSuccess = false;
+                                            dialog.dismiss();
+                                        }
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        LogUtil.e("publish failed, throwable -> %s", throwable.getMessage());
+                                        isPublishSuccess = false;
+                                        dialog.dismiss();
+                                    }
+                                });
                     }
                 });
             }
@@ -194,12 +184,13 @@ public class PublishActivity extends BaseActivity {
             if (requestCode == PictureConfig.CHOOSE_REQUEST) {
                 List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
                 if (!selectList.isEmpty()) {
+                    int index = picSparseArray.size();
                     for (int i = 0; i < selectList.size(); i++) {
-                        addPic(selectList.get(i), i);
+                        addPic(selectList.get(i), i + index);
                     }
                 }
                 if (picLayout.getChildCount() == PIC_COUNT + 1) {
-                    ivMore.setVisibility(View.GONE);
+                    ivMore.setVisibility(View.INVISIBLE);
                 } else {
                     ivMore.setVisibility(View.VISIBLE);
                 }
@@ -215,7 +206,7 @@ public class PublishActivity extends BaseActivity {
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height, Gravity.CENTER);
         ImageView imageView = new ImageView(this);
         imageView.setLayoutParams(layoutParams);
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
         ImageUtil.loadImage(imageView, compressPath);
 
         ImageView ivDelete = new ImageView(this);
@@ -224,15 +215,16 @@ public class PublishActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 ViewGroup parent = (ViewGroup) v.getParent().getParent();  //linearLayout
-                int chileIndex = parent.indexOfChild((View) v.getParent());
-                picLayout.removeViewAt(chileIndex);
-                picLayoutArray.removeAt(chileIndex);
-                for (int i = chileIndex + 1; i < PIC_COUNT; i++) {
-                    if (picLayoutArray.get(i) != null) {
-                        picLayoutArray.put(i - 1, picLayoutArray.get(i));
-                        picLayoutArray.remove(i);
+                int childIndex = parent.indexOfChild((View) v.getParent());
+                picLayout.removeViewAt(childIndex);
+                final int count = picSparseArray.size();
+                for (int i = childIndex + 1; i < count; i++) {
+                    if (picSparseArray.get(i) != null) {
+                        picSparseArray.put(i - 1, picSparseArray.get(i));
                     }
                 }
+                picSparseArray.remove(count - 1);
+                LogUtil.d("删除掉了：%d, === 图片数量：%d", childIndex, picSparseArray.size());
                 if (parent.getChildCount() < PIC_COUNT + 1 && ivMore.getVisibility() != View.VISIBLE) {
                     ivMore.setVisibility(View.VISIBLE);
                 }
@@ -251,10 +243,7 @@ public class PublishActivity extends BaseActivity {
                 ScreenUtil.dp2px(this, 30), Gravity.TOP | Gravity.END);
         frameLayout.addView(ivDelete, deleteParams);
         picLayout.addView(frameLayout, index);
-        picLayoutArray.put(index, frameLayout);
-
-        picArray.put(index, compressPath);
-//        Pair<String, String> pair = new Pair<>(compressPath, sourcePath);
-//        picSparseArray.put(index, pair);
+        Pair<String, String> pair = new Pair<>(UserConfig.inst().getUserId() + System.currentTimeMillis(), sourcePath);
+        picSparseArray.put(index, pair);
     }
 }

@@ -16,11 +16,11 @@ import com.zjf.transaction.app.AppConfig;
  */
 public class PriceUtil {
 
-    public static CharSequence createPrice(float price) {
+    public static CharSequence createPrice(String price) {
         SpannableStringBuilder builder = new SpannableStringBuilder();
         final Drawable drawable = ContextCompat.getDrawable(AppConfig.context(), R.drawable.icon_price);
         if (drawable != null) {
-            builder.append("  ").append(String.valueOf(price));
+            builder.append("  ").append(price);
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
             ImageSpan span = new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
             builder.setSpan(span, 1, 2, Spannable.SPAN_INCLUSIVE_INCLUSIVE);

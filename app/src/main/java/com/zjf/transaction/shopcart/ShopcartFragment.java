@@ -51,7 +51,7 @@ public class ShopcartFragment extends BaseFragment {
         shopcartItemList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             User user = new User("傻逼", null, "广东", "深圳", "傻逼大学");
-            Commodity commodity = new Commodity("0", "0",null, "竹鼠一只三块，三只十块，傻逼的快来买", 1999, 0);
+            Commodity commodity = new Commodity("0", "0",null, "竹鼠一只三块，三只十块，傻逼的快来买", "1999", 0);
             shopcartItemList.add(new ShopcartItem(user, commodity));
         }
     }

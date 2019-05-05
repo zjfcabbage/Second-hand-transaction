@@ -98,7 +98,7 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
             }
             ImageUtil.loadImage(ivUserPic, user.getUserPicUrl());
             tvUserName.setText(user.getUserName());
-            ImageUtil.loadImage(ivCommodityPic, commodity.getImageUrls().get(0));
+            ImageUtil.loadImage(ivCommodityPic, commodity.getImageUrls());
             tvCommodityMsg.setText(commodity.getMsg());
             tvCommodityMoney.setText(PriceUtil.createPrice(commodity.getPrice()));
             cbChooseCommodity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
