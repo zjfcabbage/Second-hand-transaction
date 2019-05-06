@@ -38,7 +38,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class MainFragment extends BaseFragment {
 
-    private static final int DEFAULT_PAGE_NUM = 0;
+    private static final int DEFAULT_PAGE_NUM = 1;
 
     private List<Commodity> commodityList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -52,13 +52,14 @@ public class MainFragment extends BaseFragment {
     @Override
     public View onCreateContent(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        init();
+//        init();
         initView(view);
         return view;
     }
 
     private void initView(View view) {
         searchLayout = view.findViewById(R.id.layout_search);
+        searchLayout.requestFocus();
         searchLayout.setPadding(0, ScreenUtil.getStatusBarHeight(), 0, 0); //下移状态栏的高度
         final EditText etSearch = searchLayout.findViewById(R.id.et_search);
         final ImageView ivPublish = searchLayout.findViewById(R.id.iv_publish);
@@ -140,37 +141,27 @@ public class MainFragment extends BaseFragment {
         recyclerView.addItemDecoration(decoration);
     }
 
-    private void init() {
-        for (int i = 0; i < 10; i++) {
-            Commodity commodity = new Commodity();
-            commodity.setImageUrls(null);
-            commodity.setMsg("竹鼠一只三块，三只十块，傻逼的快来买");
-            commodity.setPrice("1900");
-            commodityList.add(commodity);
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-//        if (disposable == null) {
-//            disposable = MainApiImpl.getAllCommodity(DEFAULT_PAGE_NUM)
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new Consumer<DataResult<List<Commodity>>>() {
-//                        @Override
-//                        public void accept(DataResult<List<Commodity>> listDataResult) throws Exception {
-//                            if (listDataResult.code == DataResult.CODE_SUCCESS) {
-//                                adapter.setDataList(listDataResult.data);
-//                                adapter.notifyDataSetChanged();
-//                            }
-//                        }
-//                    }, new Consumer<Throwable>() {
-//                        @Override
-//                        public void accept(Throwable throwable) throws Exception {
-//                            LogUtil.e("throwable -> %s", throwable.getMessage());
-//                        }
-//                    });
-//        }
+        if (disposable == null) {
+            disposable = MainApiImpl.getAllCommodity(DEFAULT_PAGE_NUM)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<DataResult<List<Commodity>>>() {
+                        @Override
+                        public void accept(DataResult<List<Commodity>> listDataResult) throws Exception {
+                            if (listDataResult.code == DataResult.CODE_SUCCESS) {
+                                adapter.setDataList(listDataResult.data);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            LogUtil.e("throwable -> %s", throwable.getMessage());
+                        }
+                    });
+        }
     }
 }

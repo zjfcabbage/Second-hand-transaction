@@ -35,7 +35,7 @@ public interface UserApi {
     Single<DataResult<User>> login(@Field("userName") String userName, @Field("password") String password);
 
     @GET("/user/exist/")
-    Single<DataResult<String>> isUserNameExisted(@Query("userName") String userName);
+    Single<DataResult<User>> isUserNameExisted(@Query("userName") String userName);
 
     @PUT("/user/update/image")
     Single<DataResult<String>> updateUserPicUrl(@Query("userId") String userId, @Query("userPicUrl") String userPicUrl);

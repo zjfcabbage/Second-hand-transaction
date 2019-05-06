@@ -55,7 +55,7 @@ public class PublishActivity extends BaseActivity {
 
     private static final int PIC_COUNT = 4;
     private ViewGroup picLayout;
-    private EditText etMsg, etPrice;
+    private EditText etName, etMsg, etPrice;
     private ImageView ivMore;
     private Button btnPublish;
 
@@ -90,6 +90,7 @@ public class PublishActivity extends BaseActivity {
     private void initView() {
         initTitleLayout();
 
+        etName = findViewById(R.id.et_name);
         etMsg = findViewById(R.id.et_msg);
         etPrice = findViewById(R.id.et_price);
 
@@ -116,9 +117,10 @@ public class PublishActivity extends BaseActivity {
                 final String userId = UserConfig.inst().getUserId();
                 final long publishTime = System.currentTimeMillis();
                 final String id = userId + "_" + publishTime;
+                final String name = etName.getText().toString();
                 final String msg = etMsg.getText().toString();
-                final String priceString = etPrice.getText().toString();
-                if (msg.isEmpty() || priceString.isEmpty() || picSparseArray.size() == 0) {
+                final String price = etPrice.getText().toString();
+                if (name.isEmpty() || msg.isEmpty() || price.isEmpty() || picSparseArray.size() == 0) {
                     Toast.makeText(PublishActivity.this, "请完善所有内容再发布", Toast.LENGTH_SHORT).show();
 //                    dialog.dismiss();
                     return;
@@ -131,7 +133,7 @@ public class PublishActivity extends BaseActivity {
                 QiNiuUtil.uploadImageList(picList, new QiNiuUtil.ActionListener() {
                     @Override
                     public void success(String url) {
-                        final Commodity commodity = new Commodity(id, userId, url, msg, priceString, publishTime);
+                        final Commodity commodity = new Commodity(id, userId, name, url, msg, price, publishTime);
                         LogUtil.d(commodity.toString());
                         MainApiImpl.publish(commodity)
                                 .subscribeOn(Schedulers.io())
@@ -245,7 +247,7 @@ public class PublishActivity extends BaseActivity {
                 ScreenUtil.dp2px(this, 30), Gravity.TOP | Gravity.END);
         frameLayout.addView(ivDelete, deleteParams);
         picLayout.addView(frameLayout, index);
-        Pair<String, String> pair = new Pair<>(UserConfig.inst().getUserId() + System.currentTimeMillis(), sourcePath);
+        Pair<String, String> pair = new Pair<>(UserConfig.inst().getUserId() + System.currentTimeMillis(), compressPath);
         picSparseArray.put(index, pair);
     }
 }

@@ -1,6 +1,5 @@
 package com.zjf.transaction.app;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
@@ -12,20 +11,11 @@ import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
-import com.zjf.transaction.MainActivity;
 import com.zjf.transaction.R;
-import com.zjf.transaction.base.DataResult;
-import com.zjf.transaction.user.UserConfig;
-import com.zjf.transaction.user.api.impl.UserApiImpl;
-import com.zjf.transaction.user.model.User;
-import com.zjf.transaction.util.LogUtil;
 
 import org.litepal.LitePal;
 
 import androidx.annotation.NonNull;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by zjfcabbage on 2019/2/6
@@ -39,7 +29,7 @@ public class BaseApplication extends Application {
             @NonNull
             @Override
             public RefreshHeader createRefreshHeader(@NonNull Context context, @NonNull RefreshLayout layout) {
-                layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.white);
+                layout.setPrimaryColorsId(R.color.colorPrimary);
                 return new ClassicsHeader(context);
             }
         });

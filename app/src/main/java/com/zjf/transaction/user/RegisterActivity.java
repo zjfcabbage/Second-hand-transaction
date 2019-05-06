@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -93,7 +94,8 @@ public class RegisterActivity extends BaseActivity {
                         || TextUtils.isEmpty(etPassword.getText().toString())
                         || TextUtils.isEmpty(spinnerProvince.getSelectedItem().toString())
                         || TextUtils.isEmpty(spinnerCity.getSelectedItem().toString())
-                        || TextUtils.isEmpty(spinnerUniversity.getSelectedItem().toString())) {
+                        || TextUtils.isEmpty(spinnerUniversity.getSelectedItem().toString())
+                        || TextUtils.isEmpty(userPic)) {
                     Toast.makeText(RegisterActivity.this, "请完善所有信息!", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -268,11 +270,11 @@ public class RegisterActivity extends BaseActivity {
                     UserApiImpl.isUserNameExisted(etAccount.getText().toString())
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Consumer<DataResult<String>>() {
+                            .subscribe(new Consumer<DataResult<User>>() {
                                 @Override
-                                public void accept(DataResult<String> stringDataResult) throws Exception {
-                                    if (stringDataResult.code == DataResult.CODE_SUCCESS) {
-                                        if (stringDataResult.data != null) {
+                                public void accept(DataResult<User> userDataResult) throws Exception {
+                                    if (userDataResult.code == DataResult.CODE_SUCCESS) {
+                                        if (userDataResult.data != null) {
                                             //用户名存在
                                             userNameExist = true;
                                             Toast.makeText(RegisterActivity.this, "用户名已存在", Toast.LENGTH_LONG).show();

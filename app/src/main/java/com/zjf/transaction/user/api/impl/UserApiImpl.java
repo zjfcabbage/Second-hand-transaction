@@ -6,7 +6,6 @@ import com.zjf.transaction.user.model.User;
 import com.zjf.transaction.util.HttpFactory;
 
 import io.reactivex.Single;
-import okhttp3.MultipartBody;
 
 public class UserApiImpl {
     private static UserApi userApi = HttpFactory.getApi(UserApi.class);
@@ -31,7 +30,7 @@ public class UserApiImpl {
         return userApi.login(userName, password);
     }
 
-    public static Single<DataResult<String>> isUserNameExisted(String userName) {
+    public static Single<DataResult<User>> isUserNameExisted(String userName) {
         return userApi.isUserNameExisted(userName);
     }
 

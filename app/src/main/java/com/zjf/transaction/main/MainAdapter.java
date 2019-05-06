@@ -1,7 +1,12 @@
 package com.zjf.transaction.main;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +17,13 @@ import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseAdapter;
 import com.zjf.transaction.base.BaseConstant;
 import com.zjf.transaction.base.BaseViewHolder;
+import com.zjf.transaction.base.DataResult;
 import com.zjf.transaction.main.model.Commodity;
 import com.zjf.transaction.pages.commodity.CommodityActivity;
+import com.zjf.transaction.user.api.impl.UserApiImpl;
+import com.zjf.transaction.user.model.User;
 import com.zjf.transaction.util.ImageUtil;
+import com.zjf.transaction.util.LogUtil;
 import com.zjf.transaction.util.PriceUtil;
 import com.zjf.transaction.widget.RoundImageView;
 
@@ -39,13 +48,50 @@ public class MainAdapter extends BaseAdapter<Commodity> {
         private ViewGroup msgLayout;
         private RoundImageView ivUserPic;
         private TextView tvCommodity, tvRMB;
+        private User user;
 
         @Override
         public void onBind(Commodity data, int position) {
-            ImageUtil.loadImage(ivCommodity, data.getImageUrls());
-//            ImageUtil.loadImage(ivUserPic,);
+            ImageUtil.loadImage(ivCommodity, getFirstPic(data.getImageUrls()));
+            bindUserPic(data.getUserId());
             tvCommodity.setText(data.getMsg());
             tvRMB.setText(PriceUtil.createPrice(data.getPrice()));
+        }
+
+        private String getFirstPic(String imageUrls) {
+            if (imageUrls == null) {
+                return null;
+            }
+            String[] urls = imageUrls.split("@@@");
+            if (urls.length > 0) {
+                return urls[0];
+            }
+            return null;
+        }
+
+        private void bindUserPic(String userId) {
+            if (userId == null) {
+                return;
+            }
+            UserApiImpl.getUser(userId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<DataResult<User>>() {
+                        @Override
+                        public void accept(DataResult<User> userDataResult) throws Exception {
+                            if (userDataResult.code == DataResult.CODE_SUCCESS) {
+                                user = userDataResult.data;
+                                ImageUtil.loadImage(ivUserPic, userDataResult.data.getUserPicUrl());
+                            } else {
+                                LogUtil.e("get user pic failed, msg -> %s", userDataResult.msg);
+                            }
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            LogUtil.e("get user pic error, throwable -> %s", throwable.getMessage());
+                        }
+                    });
         }
 
         public ViewHolder(@NonNull View itemView) {
@@ -63,9 +109,10 @@ public class MainAdapter extends BaseAdapter<Commodity> {
                     Bundle bundle = new Bundle();
                     Commodity commodity = getIndexData();
                     if (commodity != null) {
-                        bundle.putString(BaseConstant.KEY_COMMODITY_ID, commodity.getId());
+                        bundle.putParcelable(BaseConstant.KEY_COMMODITY_ID, commodity);
+                        bundle.putParcelable(BaseConstant.KEY_USER, user);
                     }
-                    CommodityActivity.start(getContext(), bundle,  CommodityActivity.class);
+                    CommodityActivity.start(getContext(), bundle, CommodityActivity.class);
                 }
             });
 

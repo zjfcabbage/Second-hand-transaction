@@ -14,11 +14,67 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/commodity_info_title"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <com.zjf.transaction.widget.RoundImageView
+            android:id="@+id/iv_user_pic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:radius="4dp"
+            app:type="rectangle"
+            tools:src="@drawable/zhushu" />
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/color_303030"
+            android:textSize="14sp"
+            android:theme="@style/BoldText"
+            app:layout_constraintLeft_toRightOf="@id/iv_user_pic"
+            app:layout_constraintTop_toTopOf="@id/iv_user_pic"
+            tools:text="@string/app_name" />
+
+        <TextView
+            android:id="@+id/tv_publish_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginBottom="3dp"
+            android:textColor="@color/color_CACACA"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_user_pic"
+            app:layout_constraintLeft_toRightOf="@id/iv_user_pic"
+            tools:text="@string/app_name" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/view_1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/layout_top_bar"
+        android:background="@color/color_E8E8E8" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/sv_commodity_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/commodity_info_title"
+        android:layout_below="@id/view_1"
+        android:layout_above="@id/view_2"
         android:paddingStart="12dp"
         android:paddingEnd="12dp">
 
@@ -27,56 +83,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_top_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-
-                <com.zjf.transaction.widget.RoundImageView
-                    android:id="@+id/iv_user_pic"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:radius="4dp"
-                    app:type="rectangle"
-                    tools:src="@drawable/zhushu" />
-
-                <TextView
-                    android:id="@+id/tv_user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="3dp"
-                    android:textColor="@color/color_303030"
-                    android:textSize="14sp"
-                    android:theme="@style/BoldText"
-                    app:layout_constraintLeft_toRightOf="@id/iv_user_pic"
-                    app:layout_constraintTop_toTopOf="@id/iv_user_pic"
-                    tools:text="@string/app_name" />
-
-                <TextView
-                    android:id="@+id/tv_publish_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginBottom="3dp"
-                    android:textColor="@color/color_CACACA"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_user_pic"
-                    app:layout_constraintLeft_toRightOf="@id/iv_user_pic"
-                    tools:text="@string/app_name" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/color_E8E8E8" />
 
             <TextView
                 android:id="@+id/tv_commodity_price"
@@ -104,10 +110,11 @@
     </androidx.core.widget.NestedScrollView>
 
     <View
+        android:id="@+id/view_2"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/color_E8E8E8"
-        android:layout_above="@id/layout_bottom_bar"/>
+        android:layout_above="@id/layout_bottom_bar"
+        android:background="@color/color_E8E8E8" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_bottom_bar"
@@ -122,10 +129,10 @@
             android:layout_height="match_parent"
             android:background="@color/colorAccent"
             android:gravity="center"
+            android:text="@string/i_want_it"
             android:textColor="@color/color_white"
             android:textSize="16sp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:text="@string/i_want_it" />
+            app:layout_constraintRight_toRightOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

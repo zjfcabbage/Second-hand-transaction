@@ -78,16 +78,19 @@ public class SplashActivity extends BaseActivity {
                                 UserConfig.inst().setLastLoginTime(System.currentTimeMillis());
                                 LogUtil.d("login success");
                                 MainActivity.start(SplashActivity.this, MainActivity.class);
-                            } else {
-                                LoginActivity.start(SplashActivity.this, LoginActivity.class);
-                                LogUtil.e("login failed, msg -> %s", userDataResult.msg);
                             }
+                        }else {
+                            LoginActivity.start(SplashActivity.this, LoginActivity.class);
+                            LogUtil.e("login failed, msg -> %s", userDataResult.msg);
                         }
+                        finish();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        LogUtil.e("login failed, throwable -> %s", throwable.getMessage());
+                        LoginActivity.start(SplashActivity.this, LoginActivity.class);
+                        LogUtil.e("login error, throwable -> %s", throwable.getMessage());
+                        finish();
                     }
                 });
     }

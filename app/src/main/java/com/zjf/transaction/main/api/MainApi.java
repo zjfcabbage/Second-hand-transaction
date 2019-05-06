@@ -20,8 +20,4 @@ public interface MainApi {
 
     @POST("/main/publish")
     Single<DataResult<String>> publish(@Body Commodity commodity);
-
-    @Multipart
-    @POST("/main/upload")
-    Single<DataResult<String>> upload(@Query("id") String id, @Part List<MultipartBody.Part> pics);
 }

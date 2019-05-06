@@ -8,7 +8,6 @@ import com.zjf.transaction.util.HttpFactory;
 import java.util.List;
 
 import io.reactivex.Single;
-import okhttp3.MultipartBody;
 
 public class MainApiImpl {
     private static MainApi mainApi = HttpFactory.getApi(MainApi.class);
@@ -21,7 +20,4 @@ public class MainApiImpl {
         return mainApi.publish(commodity);
     }
 
-    public static Single<DataResult<String>> upload(String id, List<MultipartBody.Part> pics) {
-        return mainApi.upload(id, pics);
-    }
 }

@@ -28,6 +28,7 @@ public class ImageUtil {
         GlideApp.with(imageView.getContext())
                 .load(imageUrl)
                 .placeholder(R.drawable.icon_placeholder)
+                .centerCrop()
                 .into(imageView);
     }
     public static void loadImage(ImageView imageView, @DrawableRes @NonNull int drawableId) {
