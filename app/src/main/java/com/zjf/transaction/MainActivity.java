@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ScreenUtil.hideStatusBar(this);
+//        ScreenUtil.hideStatusBar(this);
         initBottomBar();
         performCheck(checkFragmentIndex.get(defaultIndex));
     }
@@ -71,6 +71,11 @@ public class MainActivity extends BaseActivity {
 
     private void performCheck(int checkId) {
         radioGroup.check(checkId);
+        if (checkId == R.id.btn_mine) {
+            ScreenUtil.hideStatusBarLight(this);
+        } else {
+            ScreenUtil.hideStatusBar(this);
+        }
         final int previousCheckId = checkFragmentIndex.get(defaultIndex);
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         final BaseFragment previousFragment = fragmentArray.get(previousCheckId); //获取之前显示的fragment

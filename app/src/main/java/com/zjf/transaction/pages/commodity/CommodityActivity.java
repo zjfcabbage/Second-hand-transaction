@@ -7,19 +7,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseActivity;
 import com.zjf.transaction.base.BaseConstant;
+import com.zjf.transaction.base.DataResult;
 import com.zjf.transaction.main.model.Commodity;
+import com.zjf.transaction.shopcart.api.impl.ShopcartApiImpl;
+import com.zjf.transaction.user.UserConfig;
 import com.zjf.transaction.user.model.User;
 import com.zjf.transaction.util.ImageUtil;
+import com.zjf.transaction.util.LogUtil;
 import com.zjf.transaction.util.PriceUtil;
 import com.zjf.transaction.util.ScreenUtil;
 import com.zjf.transaction.util.TimeUtil;
 import com.zjf.transaction.widget.RoundImageView;
 
-import androidx.core.widget.NestedScrollView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class CommodityActivity extends BaseActivity {
 
@@ -33,7 +40,7 @@ public class CommodityActivity extends BaseActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra(KEY_BUNDLE);
         if (bundle != null) {
-            commodity = bundle.getParcelable(BaseConstant.KEY_COMMODITY_ID);
+            commodity = bundle.getParcelable(BaseConstant.KEY_COMMODITY);
             user = bundle.getParcelable(BaseConstant.KEY_USER);
         }
         ScreenUtil.hideStatusBar(this);
@@ -81,7 +88,29 @@ public class CommodityActivity extends BaseActivity {
         tvAddShopcart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2019/4/5 将商品添加进购物车
+                if (commodity != null) {
+                    ShopcartApiImpl.add(UserConfig.inst().getUserId(), commodity.getId())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Consumer<DataResult<String>>() {
+                                @Override
+                                public void accept(DataResult<String> stringDataResult) throws Exception {
+                                    if (stringDataResult.code == DataResult.CODE_SUCCESS) {
+                                        Toast.makeText(CommodityActivity.this, "加入购物车成功", Toast.LENGTH_SHORT).show();
+                                        LogUtil.d("add shopcart success");
+                                    } else {
+                                        Toast.makeText(CommodityActivity.this, "加入购物车失败，请检查网络后重试", Toast.LENGTH_SHORT).show();
+                                        LogUtil.e("add shopcart failed, msg -> %s", stringDataResult.msg);
+                                    }
+                                }
+                            }, new Consumer<Throwable>() {
+                                @Override
+                                public void accept(Throwable throwable) throws Exception {
+                                    Toast.makeText(CommodityActivity.this, "加入购物车失败，请检查网络后重试", Toast.LENGTH_SHORT).show();
+                                    LogUtil.e("add shopcart error, throwable -> %s", throwable.getMessage());
+                                }
+                            });
+                }
             }
         });
     }

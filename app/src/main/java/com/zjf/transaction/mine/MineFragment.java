@@ -50,7 +50,6 @@ public class MineFragment extends BaseFragment {
     public View onCreateContent(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
         view.setPadding(ScreenUtil.dp2px(getActivity(), 25), ScreenUtil.getStatusBarHeight(), ScreenUtil.dp2px(getActivity(), 25), 0);
-        ScreenUtil.hideStatusBarLight(getActivity());
         initUserInfoLayout(view);
         initPublishLayout(view);
         initLogout(view);

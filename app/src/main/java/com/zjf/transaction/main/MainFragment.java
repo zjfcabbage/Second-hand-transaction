@@ -52,7 +52,6 @@ public class MainFragment extends BaseFragment {
     @Override
     public View onCreateContent(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-//        init();
         initView(view);
         return view;
     }
@@ -83,7 +82,6 @@ public class MainFragment extends BaseFragment {
                                 if (listDataResult.code == DataResult.CODE_SUCCESS) {
                                     LogUtil.d("refresh success");
                                     adapter.setDataList(listDataResult.data);
-                                    adapter.notifyDataSetChanged();
                                     pageNum = DEFAULT_PAGE_NUM;
                                     refreshLayout.finishRefresh(true);
                                 } else {
@@ -112,7 +110,6 @@ public class MainFragment extends BaseFragment {
                                 if (listDataResult.code == DataResult.CODE_SUCCESS) {
                                     LogUtil.d("load more success");
                                     adapter.appendDataList(listDataResult.data);
-                                    adapter.notifyDataSetChanged();
                                     pageNum++;
                                     refreshLayout.finishLoadMore(true);
                                 } else {
@@ -153,7 +150,6 @@ public class MainFragment extends BaseFragment {
                         public void accept(DataResult<List<Commodity>> listDataResult) throws Exception {
                             if (listDataResult.code == DataResult.CODE_SUCCESS) {
                                 adapter.setDataList(listDataResult.data);
-                                adapter.notifyDataSetChanged();
                             }
                         }
                     }, new Consumer<Throwable>() {

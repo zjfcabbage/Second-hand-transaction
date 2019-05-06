@@ -1,5 +1,6 @@
 package com.zjf.transaction.shopcart.model;
 
+import com.google.gson.annotations.SerializedName;
 import com.zjf.transaction.main.model.Commodity;
 import com.zjf.transaction.user.model.User;
 
@@ -10,8 +11,10 @@ import com.zjf.transaction.user.model.User;
  */
 public class ShopcartItem {
     private boolean isChecked;
-    public User user;
-    public Commodity commodity;
+    @SerializedName("user")
+    private User user;
+    @SerializedName("commodity")
+    private Commodity commodity;
 
     public ShopcartItem() {
     }

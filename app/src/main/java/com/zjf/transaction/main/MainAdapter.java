@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseAdapter;
@@ -20,6 +21,8 @@ import com.zjf.transaction.base.BaseViewHolder;
 import com.zjf.transaction.base.DataResult;
 import com.zjf.transaction.main.model.Commodity;
 import com.zjf.transaction.pages.commodity.CommodityActivity;
+import com.zjf.transaction.shopcart.api.impl.ShopcartApiImpl;
+import com.zjf.transaction.user.UserConfig;
 import com.zjf.transaction.user.api.impl.UserApiImpl;
 import com.zjf.transaction.user.model.User;
 import com.zjf.transaction.util.ImageUtil;
@@ -33,7 +36,6 @@ import com.zjf.transaction.widget.RoundImageView;
  * @author 郑佳锋 zhengjiafeng@bytedance.com
  */
 public class MainAdapter extends BaseAdapter<Commodity> {
-
 
     @NonNull
     @Override
@@ -109,7 +111,7 @@ public class MainAdapter extends BaseAdapter<Commodity> {
                     Bundle bundle = new Bundle();
                     Commodity commodity = getIndexData();
                     if (commodity != null) {
-                        bundle.putParcelable(BaseConstant.KEY_COMMODITY_ID, commodity);
+                        bundle.putParcelable(BaseConstant.KEY_COMMODITY, commodity);
                         bundle.putParcelable(BaseConstant.KEY_USER, user);
                     }
                     CommodityActivity.start(getContext(), bundle, CommodityActivity.class);
@@ -119,7 +121,33 @@ public class MainAdapter extends BaseAdapter<Commodity> {
             ivAddToShopcart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO: 2019/4/2 加入购物车
+                    final Commodity commodity = getIndexData();
+                    if (commodity != null) {
+                        ShopcartApiImpl.add(UserConfig.inst().getUserId(), commodity.getId())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<DataResult<String>>() {
+                                    @Override
+                                    public void accept(DataResult<String> stringDataResult) throws Exception {
+                                        if (stringDataResult.code == DataResult.CODE_SUCCESS) {
+                                            Toast.makeText(getContext(), "加入购物车成功", Toast.LENGTH_SHORT).show();
+                                            LogUtil.d("add shopcart success");
+                                        } else {
+                                            String msg = stringDataResult.msg;
+                                            if (msg.contains("SQLIntegrityConstraintViolationException")) {
+                                                Toast.makeText(getContext(), "购物车已存在此商品", Toast.LENGTH_SHORT).show();
+                                                LogUtil.e("add shopcart failed, msg -> %s", stringDataResult.msg);
+                                            }
+                                        }
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) throws Exception {
+                                        Toast.makeText(getContext(), "加入购物车失败，请检查网络后重试", Toast.LENGTH_SHORT).show();
+                                        LogUtil.e("add shopcart error, throwable -> %s", throwable.getMessage());
+                                    }
+                                });
+                    }
                 }
             });
         }

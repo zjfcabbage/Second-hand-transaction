@@ -44,4 +44,8 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     public int getItemCount() {
         return dataList.size();
     }
+
+    public List<T> getDataList() {
+        return dataList;
+    }
 }

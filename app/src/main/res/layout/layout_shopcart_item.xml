@@ -5,28 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/color_white"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="1dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_commodity_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:background="@color/colorAccent">
 
         <LinearLayout
             android:id="@+id/layout_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.zjf.transaction.widget.RoundImageView
                 android:id="@+id/iv_user_pic"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 app:type="circle"
                 tools:src="@drawable/cat" />
 
@@ -34,78 +37,82 @@
                 android:id="@+id/tv_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="16dp"
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:textColor="@color/color_303030"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 tools:text="叶良辰" />
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="10dp"
                 android:src="@drawable/icon_forward" />
 
         </LinearLayout>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_commodity_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="16dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="10dp"
             app:layout_constraintTop_toBottomOf="@id/layout_user">
 
             <CheckBox
                 android:id="@+id/cb_commodity_choose"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true"
                 android:background="@drawable/bg_common_checkbox"
-                android:button="@null" />
+                android:button="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.zjf.transaction.widget.RoundImageView
                 android:id="@+id/iv_commodity_pic"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginStart="16dp"
-                android:layout_toEndOf="@id/cb_commodity_choose"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/cb_commodity_choose"
+                app:layout_constraintTop_toTopOf="parent"
                 app:radius="8dp"
                 app:type="rectangle"
                 tools:src="@drawable/cat" />
 
             <TextView
                 android:id="@+id/tv_commodity_msg"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:layout_toEndOf="@id/iv_commodity_pic"
                 android:ellipsize="end"
                 android:lineSpacingExtra="5dp"
                 android:maxLines="2"
                 android:textColor="@color/color_303030"
                 android:textSize="16sp"
+                app:layout_constraintLeft_toRightOf="@id/iv_commodity_pic"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="我叶良辰第一次不服，竹鼠一只三块，十块钱三只，傻子快来买" />
 
             <TextView
                 android:id="@+id/tv_commodity_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_commodity_msg"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:layout_toEndOf="@id/iv_commodity_pic"
                 android:textColor="@color/color_007fff"
                 android:textSize="25sp"
                 android:theme="@style/BoldText"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/iv_commodity_pic"
+                app:layout_constraintTop_toBottomOf="@id/tv_commodity_msg"
                 tools:text="1999" />
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
