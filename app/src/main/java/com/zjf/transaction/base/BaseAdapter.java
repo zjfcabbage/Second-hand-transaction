@@ -28,6 +28,11 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         notifyDataSetChanged();
     }
 
+    public void appendData(int position, T data) {
+        dataList.add(position, data);
+        notifyDataSetChanged();
+    }
+
     public void clearData() {
         dataList.clear();
         notifyDataSetChanged();

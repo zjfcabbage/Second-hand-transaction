@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey;
 
 import java.util.List;
 
-@Entity
 public class Commodity {
     @PrimaryKey
     @ColumnInfo(name = "id")

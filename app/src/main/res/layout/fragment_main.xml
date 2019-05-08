@@ -26,7 +26,7 @@
             android:drawableEnd="@drawable/icon_search"
             android:hint="@string/please_input_name"
             android:paddingStart="15dp"
-            android:textColor="@color/color_CACACA"
+            android:textColor="@color/color_303030"
             android:textSize="15sp" />
 
         <ImageView

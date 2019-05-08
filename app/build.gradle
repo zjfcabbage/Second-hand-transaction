@@ -22,7 +22,6 @@ android {
 }
 
 dependencies {
-    def room_version = '2.0.0-beta01'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
@@ -36,21 +35,18 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'org.litepal.android:java:3.0.0'
+    //Glide不要升级，目前pictureSelector不支持4.9.0
     implementation 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     //解决Glide找不到Android声明库问题
     annotationProcessor 'androidx.annotation:annotation:1.0.2'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'org.jetbrains:annotations-java5:15.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha04'
     implementation 'androidx.cardview:cardview:1.0.0'
 
-    //noinspection GradleDependency
-    implementation "androidx.room:room-runtime:$room_version"
-    // optional - RxJava support for Room
-    //noinspection GradleDependency
-    implementation "androidx.room:room-rxjava2:$room_version"
-    // Test helpers
-    testImplementation "androidx.room:room-testing:$room_version"
+    implementation "androidx.room:room-runtime:2.1.0-alpha07"
+    annotationProcessor "androidx.room:room-compiler:2.1.0-alpha07"
+    implementation "androidx.room:room-rxjava2:2.1.0-alpha07"
 
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-6'

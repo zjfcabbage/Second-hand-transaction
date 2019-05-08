@@ -1,4 +1,4 @@
-package com.zjf.transaction.pages.commodity;
+package com.zjf.transaction.pages;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -7,15 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zjf.transaction.R;
 import com.zjf.transaction.base.BaseActivity;
 import com.zjf.transaction.base.BaseConstant;
-import com.zjf.transaction.base.DataResult;
+import com.zjf.transaction.database.TransactionDatabase;
 import com.zjf.transaction.main.model.Commodity;
-import com.zjf.transaction.shopcart.api.impl.ShopcartApiImpl;
-import com.zjf.transaction.user.UserConfig;
+import com.zjf.transaction.msg.model.MsgItem;
 import com.zjf.transaction.user.model.User;
 import com.zjf.transaction.util.ImageUtil;
 import com.zjf.transaction.util.LogUtil;
@@ -24,8 +22,11 @@ import com.zjf.transaction.util.ScreenUtil;
 import com.zjf.transaction.util.TimeUtil;
 import com.zjf.transaction.widget.RoundImageView;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import org.reactivestreams.Publisher;
+
+import io.reactivex.Flowable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class CommodityActivity extends BaseActivity {
@@ -47,7 +48,6 @@ public class CommodityActivity extends BaseActivity {
         initTitleLayout();
         initCommodityInfoLayout();
         initTopBarLayout();
-        initBottomBarLayout();
     }
 
     private void initCommodityInfoLayout() {
@@ -82,46 +82,13 @@ public class CommodityActivity extends BaseActivity {
         }
     }
 
-    private void initBottomBarLayout() {
-        ViewGroup bottomBarLayout = findViewById(R.id.layout_bottom_bar);
-        final TextView tvAddShopcart = bottomBarLayout.findViewById(R.id.tv_add_shopcart);
-        tvAddShopcart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (commodity != null) {
-                    ShopcartApiImpl.add(UserConfig.inst().getUserId(), commodity.getId())
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Consumer<DataResult<String>>() {
-                                @Override
-                                public void accept(DataResult<String> stringDataResult) throws Exception {
-                                    if (stringDataResult.code == DataResult.CODE_SUCCESS) {
-                                        Toast.makeText(CommodityActivity.this, "加入购物车成功", Toast.LENGTH_SHORT).show();
-                                        LogUtil.d("add shopcart success");
-                                    } else {
-                                        Toast.makeText(CommodityActivity.this, "加入购物车失败，请检查网络后重试", Toast.LENGTH_SHORT).show();
-                                        LogUtil.e("add shopcart failed, msg -> %s", stringDataResult.msg);
-                                    }
-                                }
-                            }, new Consumer<Throwable>() {
-                                @Override
-                                public void accept(Throwable throwable) throws Exception {
-                                    Toast.makeText(CommodityActivity.this, "加入购物车失败，请检查网络后重试", Toast.LENGTH_SHORT).show();
-                                    LogUtil.e("add shopcart error, throwable -> %s", throwable.getMessage());
-                                }
-                            });
-                }
-            }
-        });
-    }
-
-
     @SuppressLint("SetTextI18n")
     private void initTopBarLayout() {
         ViewGroup topBarLayout = findViewById(R.id.layout_top_bar);
         final RoundImageView ivUserPic = topBarLayout.findViewById(R.id.iv_user_pic);
         final TextView tvUserName = topBarLayout.findViewById(R.id.tv_user_name);
         final TextView tvPublishTime = topBarLayout.findViewById(R.id.tv_publish_time);
+        final TextView tvChat = topBarLayout.findViewById(R.id.tv_chat);
 
         if (commodity != null) {
             tvPublishTime.setText(TimeUtil.formatTime(commodity.getPublishTime()));
@@ -135,6 +102,16 @@ public class CommodityActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // TODO: 2019/4/5 跳转用户信息
+            }
+        });
+        tvChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString(BaseConstant.KEY_USER_Id, user.getUserId());
+                bundle.putString(BaseConstant.KEY_USER_PIC_URL, user.getUserPicUrl());
+                bundle.putString(BaseConstant.KEY_USER_NAME, user.getUserName());
+                ChatActivity.start(CommodityActivity.this, bundle, ChatActivity.class);
             }
         });
     }

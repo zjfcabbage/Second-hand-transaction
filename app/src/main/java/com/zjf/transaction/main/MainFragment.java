@@ -1,8 +1,13 @@
 package com.zjf.transaction.main;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -15,7 +20,9 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zjf.transaction.R;
+import com.zjf.transaction.app.AppConfig;
 import com.zjf.transaction.base.BaseAdapter;
+import com.zjf.transaction.base.BaseConstant;
 import com.zjf.transaction.base.BaseFragment;
 import com.zjf.transaction.base.DataResult;
 import com.zjf.transaction.main.api.impl.MainApiImpl;
@@ -24,6 +31,7 @@ import com.zjf.transaction.util.LogUtil;
 import com.zjf.transaction.util.ScreenUtil;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -41,23 +49,49 @@ public class MainFragment extends BaseFragment {
     private static final int DEFAULT_PAGE_NUM = 1;
 
     private List<Commodity> commodityList = new ArrayList<>();
-    private RecyclerView recyclerView;
     private BaseAdapter<Commodity> adapter;
-    private StaggeredGridLayoutManager manager;
-    private ViewGroup searchLayout;
-    private RefreshLayout refreshLayout;
     private Disposable disposable;
     private int pageNum = DEFAULT_PAGE_NUM;
+    private Receiver receiver = new Receiver();
+
+
+    class Receiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (BaseConstant.ACTION_MAIN.equals(intent.getAction())) {
+                ArrayList<String> commodityIdList = intent.getBundleExtra(BaseConstant.KEY_MAIN_BUNDLE)
+                        .getStringArrayList(BaseConstant.KEY_MAIN_DELETE);
+                if (commodityIdList == null) {
+                    return;
+                }
+                if (!commodityIdList.isEmpty()) {
+                    List<Commodity> list = adapter.getDataList();
+                    Iterator<Commodity> iterator = list.iterator();
+                    for (int i = 0; i < commodityIdList.size(); i++) {
+                        final String id = commodityIdList.get(i);
+                        while (iterator.hasNext()) {
+                            Commodity commodity = iterator.next();
+                            if (id.equals(commodity.getId())) {
+                                iterator.remove();
+                            }
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }
+    }
 
     @Override
     public View onCreateContent(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        AppConfig.getManager().registerReceiver(receiver, new IntentFilter(BaseConstant.ACTION_MAIN));
         initView(view);
         return view;
     }
 
     private void initView(View view) {
-        searchLayout = view.findViewById(R.id.layout_search);
+        ViewGroup searchLayout = view.findViewById(R.id.layout_search);
         searchLayout.requestFocus();
         searchLayout.setPadding(0, ScreenUtil.getStatusBarHeight(), 0, 0); //下移状态栏的高度
         final EditText etSearch = searchLayout.findViewById(R.id.et_search);
@@ -69,7 +103,7 @@ public class MainFragment extends BaseFragment {
             }
         });
 
-        refreshLayout = view.findViewById(R.id.layout_refresh);
+        RefreshLayout refreshLayout = view.findViewById(R.id.layout_refresh);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@androidx.annotation.NonNull final RefreshLayout refreshLayout) {
@@ -127,12 +161,12 @@ public class MainFragment extends BaseFragment {
             }
         });
 
-        recyclerView = view.findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
 
         adapter = new MainAdapter();
         adapter.setDataList(commodityList);
         recyclerView.setAdapter(adapter);
-        manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(manager);
         MainPageDecoration decoration = new MainPageDecoration(10);
         recyclerView.addItemDecoration(decoration);
@@ -159,5 +193,11 @@ public class MainFragment extends BaseFragment {
                         }
                     });
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AppConfig.getManager().unregisterReceiver(receiver);
     }
 }

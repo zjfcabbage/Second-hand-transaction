@@ -3,7 +3,6 @@ package com.zjf.transaction.database.entity;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 
-@Entity(primaryKeys = {"fromId", "toId"})
 public class Msg {
     @ColumnInfo(name = "from_id")
     private String fromId;

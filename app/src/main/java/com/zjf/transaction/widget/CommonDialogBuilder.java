@@ -40,8 +40,8 @@ public class CommonDialogBuilder {
         this.context = context;
         title = "";
         message = "";
-        positiveText = "";
-        negativeText = "";
+        positiveText = "确定";
+        negativeText = "取消";
         isCancelable = true;
         isCancelOutside = true;
         dismissAuto = true;

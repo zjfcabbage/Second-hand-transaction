@@ -20,7 +20,7 @@ import com.zjf.transaction.base.BaseConstant;
 import com.zjf.transaction.base.BaseViewHolder;
 import com.zjf.transaction.base.DataResult;
 import com.zjf.transaction.main.model.Commodity;
-import com.zjf.transaction.pages.commodity.CommodityActivity;
+import com.zjf.transaction.pages.CommodityActivity;
 import com.zjf.transaction.shopcart.api.impl.ShopcartApiImpl;
 import com.zjf.transaction.user.UserConfig;
 import com.zjf.transaction.user.api.impl.UserApiImpl;

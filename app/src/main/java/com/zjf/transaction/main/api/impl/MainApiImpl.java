@@ -20,4 +20,8 @@ public class MainApiImpl {
         return mainApi.publish(commodity);
     }
 
+    public static Single<DataResult<String>> delete(List<String> list) {
+        return mainApi.delete(list);
+    }
+
 }

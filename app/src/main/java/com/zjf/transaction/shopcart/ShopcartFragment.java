@@ -1,13 +1,18 @@
 package com.zjf.transaction.shopcart;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.internal.disposables.ListCompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -17,22 +22,29 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.zjf.transaction.MainActivity;
 import com.zjf.transaction.R;
+import com.zjf.transaction.app.AppConfig;
 import com.zjf.transaction.base.BaseAdapter;
+import com.zjf.transaction.base.BaseConstant;
 import com.zjf.transaction.base.BaseFragment;
 import com.zjf.transaction.base.DataResult;
+import com.zjf.transaction.main.api.impl.MainApiImpl;
 import com.zjf.transaction.main.model.Commodity;
 import com.zjf.transaction.shopcart.api.impl.ShopcartApiImpl;
 import com.zjf.transaction.shopcart.model.ShopcartItem;
 import com.zjf.transaction.user.UserConfig;
 import com.zjf.transaction.util.LogUtil;
 import com.zjf.transaction.util.ScreenUtil;
+import com.zjf.transaction.widget.CommonDialogBuilder;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -49,7 +61,7 @@ public class ShopcartFragment extends BaseFragment {
     private CheckBox cbChooseAll;
     private TextView tvAllMoney;
     private TextView tvPay;
-
+    private Disposable disposable;
 
     @Override
     public View onCreateContent(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -114,7 +126,7 @@ public class ShopcartFragment extends BaseFragment {
                             public void accept(DataResult<List<ShopcartItem>> listDataResult) throws Exception {
                                 if (listDataResult.code == DataResult.CODE_SUCCESS && listDataResult.data != null) {
                                     shopcartAdapter.appendDataList(listDataResult.data);
-                                    shopcartItemList = listDataResult.data;
+                                    shopcartItemList.addAll(listDataResult.data);
                                     refreshLayout.finishLoadMore(true);
                                     pageNum++;
                                     LogUtil.d("load more shopcart item success");
@@ -177,30 +189,109 @@ public class ShopcartFragment extends BaseFragment {
                 shopcartAdapter.setDataList(shopcartItemList);
             }
         });
+
+        tvPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float sumMoney = 0;
+                try {
+                    sumMoney = Float.valueOf(tvAllMoney.getText().toString());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+                if (sumMoney == 0) {
+                    Toast.makeText(getActivity(), "请选择想要购买的商品", Toast.LENGTH_SHORT).show();
+                } else {
+                    new CommonDialogBuilder(getActivity())
+                            .setTitle("付款")
+                            .setMsg("需要支付" + sumMoney + "元")
+                            .setPositive("支付", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(getActivity(), "支付成功", Toast.LENGTH_SHORT).show();
+                                    deletePayItem();
+                                    tvAllMoney.setText("0");
+                                }
+                            })
+                            .show();
+
+                }
+            }
+        });
+    }
+
+    private void deletePayItem() {
+        //商品已被购买，清除主页和购物车中对应的条目
+        final ArrayList<String> commodityList = new ArrayList<>();
+        Iterator<ShopcartItem> iterator = shopcartItemList.iterator();
+        while (iterator.hasNext()) {
+            ShopcartItem item = iterator.next();
+            if (item.isChecked()) {
+                commodityList.add(item.getCommodity().getId());
+                iterator.remove();
+            }
+        }
+        shopcartAdapter.setDataList(shopcartItemList);
+        ShopcartApiImpl.deleteMore(UserConfig.inst().getUserId(), commodityList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .flatMap(new Function<DataResult<String>, SingleSource<DataResult<String>>>() {
+                    @Override
+                    public SingleSource<DataResult<String>> apply(DataResult<String> stringDataResult) throws Exception {
+                        if (stringDataResult.code == DataResult.CODE_SUCCESS) {
+                            LogUtil.d("shop item, update shopcart success");
+                            return MainApiImpl.delete(commodityList);
+                        } else {
+                            LogUtil.d("shop item, update shopcart failed, msg -> %s", stringDataResult.msg);
+                            return null;
+                        }
+                    }
+                }).subscribe(new Consumer<DataResult<String>>() {
+            @Override
+            public void accept(DataResult<String> stringDataResult) throws Exception {
+                if (stringDataResult.code == DataResult.CODE_SUCCESS) {
+                    LogUtil.d("shop item, update main page success");
+                    Intent intent = new Intent(BaseConstant.ACTION_MAIN);
+                    Bundle bundle = new Bundle();
+                    bundle.putStringArrayList(BaseConstant.KEY_MAIN_DELETE, commodityList);
+                    intent.putExtra(BaseConstant.KEY_MAIN_BUNDLE, bundle);
+                    AppConfig.getManager().sendBroadcast(intent);
+                } else {
+                    LogUtil.d("shop item, update main page failed, msg -> %s", stringDataResult.msg);
+                }
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                LogUtil.d("shop item, update main page error, throwable -> %s", throwable.getMessage());
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        ShopcartApiImpl.getShopcartItem(UserConfig.inst().getUserId(), DEFAULT_PAGE_NUM)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<DataResult<List<ShopcartItem>>>() {
-                    @Override
-                    public void accept(DataResult<List<ShopcartItem>> listDataResult) throws Exception {
-                        if (listDataResult.code == DataResult.CODE_SUCCESS && listDataResult.data != null) {
-                            LogUtil.d("refresh shopcart item success");
-                            shopcartAdapter.setDataList(listDataResult.data);
-                            shopcartItemList = listDataResult.data;
-                        } else {
-                            LogUtil.e("refresh shopcart item failed, msg -> %s", listDataResult.msg);
+        if (disposable == null) {
+            disposable = ShopcartApiImpl.getShopcartItem(UserConfig.inst().getUserId(), DEFAULT_PAGE_NUM)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<DataResult<List<ShopcartItem>>>() {
+                        @Override
+                        public void accept(DataResult<List<ShopcartItem>> listDataResult) throws Exception {
+                            if (listDataResult.code == DataResult.CODE_SUCCESS && listDataResult.data != null) {
+                                LogUtil.d("refresh shopcart item success");
+                                shopcartAdapter.setDataList(listDataResult.data);
+                                shopcartItemList = listDataResult.data;
+                            } else {
+                                LogUtil.e("refresh shopcart item failed, msg -> %s", listDataResult.msg);
+                            }
                         }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        LogUtil.e("refresh shopcart item error, throwable -> %s", throwable.getMessage());
-                    }
-                });
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            LogUtil.e("refresh shopcart item error, throwable -> %s", throwable.getMessage());
+                        }
+                    });
+        }
     }
 }

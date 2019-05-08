@@ -7,7 +7,9 @@ import java.util.List;
 
 import io.reactivex.Single;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -17,4 +19,7 @@ public interface MainApi {
 
     @POST("/main/publish")
     Single<DataResult<String>> publish(@Body Commodity commodity);
+
+    @HTTP(method = "DELETE", path = "/main/delete", hasBody = true)
+    Single<DataResult<String>> delete(@Body List<String> list);
 }

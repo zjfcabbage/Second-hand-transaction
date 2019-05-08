@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".pages.commodity.CommodityActivity">
+    tools:context=".pages.CommodityActivity">
 
     <include
         android:id="@+id/commodity_info_title"
@@ -20,10 +20,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/commodity_info_title"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:paddingStart="12dp"
-        android:paddingEnd="12dp">
+        android:paddingTop="10dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="10dp">
 
         <com.zjf.transaction.widget.RoundImageView
             android:id="@+id/iv_user_pic"
@@ -60,6 +60,20 @@
             app:layout_constraintLeft_toRightOf="@id/iv_user_pic"
             tools:text="@string/app_name" />
 
+        <TextView
+            android:id="@+id/tv_chat"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_common_button"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="@string/chat"
+            android:textColor="@color/color_white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
@@ -73,8 +87,8 @@
         android:id="@+id/sv_commodity_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/view_1"
         android:layout_above="@id/view_2"
+        android:layout_below="@id/view_1"
         android:paddingStart="12dp"
         android:paddingEnd="12dp">
 
@@ -109,30 +123,4 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <View
-        android:id="@+id/view_2"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_above="@id/layout_bottom_bar"
-        android:background="@color/color_E8E8E8" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:padding="12dp">
-
-        <TextView
-            android:id="@+id/tv_add_shopcart"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorAccent"
-            android:gravity="center"
-            android:text="@string/i_want_it"
-            android:textColor="@color/color_white"
-            android:textSize="16sp"
-            app:layout_constraintRight_toRightOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

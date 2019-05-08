@@ -16,7 +16,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".pages.commodity.CommodityActivity"/>
+        <activity android:name=".pages.ChatActivity"/>
+        <activity android:name=".pages.CommodityActivity" />
         <activity android:name=".user.RegisterActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".user.LoginActivity" />
@@ -28,9 +29,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.PublishActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
-
+        <activity
+            android:name=".main.PublishActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
     </application>
 
 </manifest>

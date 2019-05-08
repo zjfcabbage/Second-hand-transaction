@@ -9,6 +9,7 @@ import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.UploadManager;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * Created by zjfcabbage on 2019/2/5
@@ -20,11 +21,13 @@ public class AppConfig {
     public static final String FIRST_START = "first_start";
     private static SharedPreferences preferences;
     private static UploadManager uploadManager;
+    private static LocalBroadcastManager manager;
 
     private static volatile Context application;
 
     public static void initApplication(Context appContext) {
         application = appContext;
+        manager = LocalBroadcastManager.getInstance(appContext);
         preferences = appContext.getSharedPreferences("app", Context.MODE_PRIVATE);
         uploadManager = new UploadManager(new Configuration.Builder().
                 zone(FixedZone.zone0)
@@ -52,5 +55,12 @@ public class AppConfig {
 
     public static boolean isFirstStart() {
         return preferences.getBoolean(FIRST_START, true);
+    }
+
+    public static LocalBroadcastManager getManager() {
+        if (manager == null) {
+            throw new NullPointerException("LocalBroadcastReceiverManager is null");
+        }
+        return manager;
     }
 }
