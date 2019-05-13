@@ -1,7 +1,16 @@
 package com.zjf.transaction;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.fragment.app.FragmentTransaction;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.View;
@@ -9,10 +18,16 @@ import android.widget.RadioGroup;
 
 import com.zjf.transaction.base.BaseActivity;
 import com.zjf.transaction.base.BaseFragment;
+import com.zjf.transaction.database.TransactionDatabase;
+import com.zjf.transaction.database.dao.MsgDao;
+import com.zjf.transaction.database.entity.Msg;
 import com.zjf.transaction.main.MainFragment;
 import com.zjf.transaction.mine.MineFragment;
 import com.zjf.transaction.msg.MsgFragment;
+import com.zjf.transaction.pages.websocket.ChatWebSocketListener;
+import com.zjf.transaction.pages.websocket.WebSocketConnectUtil;
 import com.zjf.transaction.shopcart.ShopcartFragment;
+import com.zjf.transaction.util.LogUtil;
 import com.zjf.transaction.util.ScreenUtil;
 
 public class MainActivity extends BaseActivity {
@@ -46,7 +61,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        ScreenUtil.hideStatusBar(this);
         initBottomBar();
         performCheck(checkFragmentIndex.get(defaultIndex));
     }

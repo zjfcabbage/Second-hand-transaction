@@ -26,7 +26,6 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -50,7 +49,7 @@ public class MsgFragment extends BaseFragment {
             if (BaseConstant.ACTION_ADD_CHAT_LIST_ITEM.equalsIgnoreCase(intent.getAction())) {
                 LogUtil.d("MsgFragment 更新数据");
                 Bundle bundle = intent.getBundleExtra(BaseConstant.BUNDLE_MSG_ITEM);
-                MsgItem item = null;
+                MsgItem item;
                 if (bundle != null) {
                     item = bundle.getParcelable(BaseConstant.KEY_MSG_ITEM);
                     final String userId = item.getUserId();
@@ -92,7 +91,7 @@ public class MsgFragment extends BaseFragment {
     public View onCreateContent(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message, container, false);
         receiver = new LocalBroadcastReceiver();
-        AppConfig.getManager().registerReceiver(receiver, new IntentFilter(BaseConstant.ACTION_ADD_CHAT_LIST_ITEM));
+        AppConfig.getLocalBroadcastManager().registerReceiver(receiver, new IntentFilter(BaseConstant.ACTION_ADD_CHAT_LIST_ITEM));
         initView(view);
         return view;
     }
@@ -132,6 +131,6 @@ public class MsgFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        AppConfig.getManager().unregisterReceiver(receiver);
+        AppConfig.getLocalBroadcastManager().unregisterReceiver(receiver);
     }
 }

@@ -17,10 +17,10 @@ import com.zjf.transaction.base.BaseAdapter;
 import com.zjf.transaction.base.BaseConstant;
 import com.zjf.transaction.base.BaseViewHolder;
 import com.zjf.transaction.database.TransactionDatabase;
+import com.zjf.transaction.database.entity.Msg;
 import com.zjf.transaction.msg.model.MsgItem;
 import com.zjf.transaction.pages.ChatActivity;
-import com.zjf.transaction.pages.CommodityActivity;
-import com.zjf.transaction.user.model.User;
+import com.zjf.transaction.user.UserConfig;
 import com.zjf.transaction.util.ImageUtil;
 import com.zjf.transaction.util.LogUtil;
 import com.zjf.transaction.util.TimeUtil;
@@ -35,7 +35,7 @@ public class MsgAdapter extends BaseAdapter<MsgItem> {
     @NonNull
     @Override
     public BaseViewHolder<MsgItem> onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_msg_item, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_chat_item, viewGroup, false);
         return new MsgHolder(view);
     }
 
@@ -59,10 +59,12 @@ public class MsgAdapter extends BaseAdapter<MsgItem> {
                     final String userId = item.getUserId();
                     final String userName = item.getUserName();
                     final String userPicUrl = item.getUserPicUrl();
+                    final String newMsg = item.getNewMsg();
                     Bundle bundle = new Bundle();
                     bundle.putString(BaseConstant.KEY_USER_Id, userId);
                     bundle.putString(BaseConstant.KEY_USER_NAME, userName);
                     bundle.putString(BaseConstant.KEY_USER_PIC_URL, userPicUrl);
+                    bundle.putString(BaseConstant.KEY_NEW_MSG, newMsg);
                     ChatActivity.start(getContext(), bundle, ChatActivity.class);
                 }
             });
@@ -91,7 +93,7 @@ public class MsgAdapter extends BaseAdapter<MsgItem> {
                                                     LogUtil.e("delete msg item error, throwable -> %s", throwable.getMessage());
                                                 }
                                             });
-                                    // TODO: 2019/5/8 清空相应用户的聊天记录
+                                    deleteChatHistory();
                                     getDataList().remove(getIndexData());
                                     notifyDataSetChanged();
                                 }
@@ -110,5 +112,24 @@ public class MsgAdapter extends BaseAdapter<MsgItem> {
                 tvFinalTime.setText(TimeUtil.formatTime(data.getTimestamp()));
             }
         }
+
+        private void deleteChatHistory() {
+            TransactionDatabase.getInstance().getMsgDao()
+                    .deleteAllMsg(getIndexData().getUserId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe(new Consumer<Integer>() {
+                        @Override
+                        public void accept(Integer integer) throws Exception {
+                            LogUtil.d("delete history success, lines -> %d", integer);
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            LogUtil.d("delete history error, throwable -> %s", throwable.getMessage());
+                        }
+                    });
+        }
     }
+
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.qiniu.android.common.FixedZone;
-import com.qiniu.android.common.Zone;
 import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.UploadManager;
 
@@ -21,13 +20,13 @@ public class AppConfig {
     public static final String FIRST_START = "first_start";
     private static SharedPreferences preferences;
     private static UploadManager uploadManager;
-    private static LocalBroadcastManager manager;
+    private static LocalBroadcastManager localBroadcastManager;
 
     private static volatile Context application;
 
     public static void initApplication(Context appContext) {
         application = appContext;
-        manager = LocalBroadcastManager.getInstance(appContext);
+        localBroadcastManager = LocalBroadcastManager.getInstance(appContext);
         preferences = appContext.getSharedPreferences("app", Context.MODE_PRIVATE);
         uploadManager = new UploadManager(new Configuration.Builder().
                 zone(FixedZone.zone0)
@@ -57,10 +56,10 @@ public class AppConfig {
         return preferences.getBoolean(FIRST_START, true);
     }
 
-    public static LocalBroadcastManager getManager() {
-        if (manager == null) {
+    public static LocalBroadcastManager getLocalBroadcastManager() {
+        if (localBroadcastManager == null) {
             throw new NullPointerException("LocalBroadcastReceiverManager is null");
         }
-        return manager;
+        return localBroadcastManager;
     }
 }

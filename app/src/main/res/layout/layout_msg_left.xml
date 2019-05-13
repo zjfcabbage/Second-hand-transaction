@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_chat_left"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:orientation="horizontal">
+
+    <com.zjf.transaction.widget.RoundImageView
+        android:id="@+id/iv_user_pic"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="5dp"
+        app:radius="4dp"
+        app:type="rectangle"
+        tools:src="@drawable/zhushu" />
+
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_chat"
+        android:gravity="center_vertical"
+        android:maxWidth="250dp"
+        android:padding="8dp"
+        android:textColor="@color/color_303030"
+        android:textSize="18sp"
+        tools:text="啊啊啊啊啊" />
+
+</LinearLayout>

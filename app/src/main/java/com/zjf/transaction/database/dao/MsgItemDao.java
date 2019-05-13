@@ -1,4 +1,4 @@
-package com.zjf.transaction.database.entity;
+package com.zjf.transaction.database.dao;
 
 import com.zjf.transaction.msg.model.MsgItem;
 

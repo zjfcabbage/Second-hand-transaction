@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.SingleSource;
@@ -13,7 +12,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.internal.disposables.ListCompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 import android.view.LayoutInflater;
@@ -35,7 +33,6 @@ import com.zjf.transaction.base.BaseConstant;
 import com.zjf.transaction.base.BaseFragment;
 import com.zjf.transaction.base.DataResult;
 import com.zjf.transaction.main.api.impl.MainApiImpl;
-import com.zjf.transaction.main.model.Commodity;
 import com.zjf.transaction.shopcart.api.impl.ShopcartApiImpl;
 import com.zjf.transaction.shopcart.model.ShopcartItem;
 import com.zjf.transaction.user.UserConfig;
@@ -255,7 +252,7 @@ public class ShopcartFragment extends BaseFragment {
                     Bundle bundle = new Bundle();
                     bundle.putStringArrayList(BaseConstant.KEY_MAIN_DELETE, commodityList);
                     intent.putExtra(BaseConstant.KEY_MAIN_BUNDLE, bundle);
-                    AppConfig.getManager().sendBroadcast(intent);
+                    AppConfig.getLocalBroadcastManager().sendBroadcast(intent);
                 } else {
                     LogUtil.d("shop item, update main page failed, msg -> %s", stringDataResult.msg);
                 }

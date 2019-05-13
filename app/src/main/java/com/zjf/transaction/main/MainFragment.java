@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -85,7 +84,7 @@ public class MainFragment extends BaseFragment {
     @Override
     public View onCreateContent(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        AppConfig.getManager().registerReceiver(receiver, new IntentFilter(BaseConstant.ACTION_MAIN));
+        AppConfig.getLocalBroadcastManager().registerReceiver(receiver, new IntentFilter(BaseConstant.ACTION_MAIN));
         initView(view);
         return view;
     }
@@ -198,6 +197,6 @@ public class MainFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        AppConfig.getManager().unregisterReceiver(receiver);
+        AppConfig.getLocalBroadcastManager().unregisterReceiver(receiver);
     }
 }
