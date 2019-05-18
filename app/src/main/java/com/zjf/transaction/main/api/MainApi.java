@@ -22,4 +22,7 @@ public interface MainApi {
 
     @HTTP(method = "DELETE", path = "/main/delete", hasBody = true)
     Single<DataResult<String>> delete(@Body List<String> list);
+
+    @POST("/main/mark")
+    Single<DataResult<String>> markCommodityIsSold(@Body List<String> list);
 }

@@ -24,4 +24,8 @@ public class MainApiImpl {
         return mainApi.delete(list);
     }
 
+    public static Single<DataResult<String>> markCommodityIsSold(List<String> list) {
+        return mainApi.markCommodityIsSold(list);
+    }
+
 }

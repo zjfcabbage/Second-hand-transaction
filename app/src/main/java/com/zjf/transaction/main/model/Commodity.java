@@ -25,6 +25,8 @@ public class Commodity implements Parcelable {
     private String price;
     @SerializedName("publishTime")
     private long publishTime;
+    @SerializedName("sold")
+    private boolean isSold;
 
     public Commodity() {
     }
@@ -47,7 +49,20 @@ public class Commodity implements Parcelable {
         msg = in.readString();
         price = in.readString();
         publishTime = in.readLong();
+        isSold = in.readByte() != 0;
     }
+
+    public static final Creator<Commodity> CREATOR = new Creator<Commodity>() {
+        @Override
+        public Commodity createFromParcel(Parcel in) {
+            return new Commodity(in);
+        }
+
+        @Override
+        public Commodity[] newArray(int size) {
+            return new Commodity[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -105,17 +120,28 @@ public class Commodity implements Parcelable {
         this.publishTime = publishTime;
     }
 
+    public boolean isSold() {
+        return isSold;
+    }
+
+    public void setSold(boolean sold) {
+        isSold = sold;
+    }
+
     @Override
     public String toString() {
         return "Commodity{" +
                 "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
-                ", imageUrls=" + imageUrls +
+                ", name='" + name + '\'' +
+                ", imageUrls='" + imageUrls + '\'' +
                 ", msg='" + msg + '\'' +
-                ", price=" + price +
+                ", price='" + price + '\'' +
                 ", publishTime=" + publishTime +
+                ", isSold=" + isSold +
                 '}';
     }
+
 
     @Override
     public int describeContents() {
@@ -131,17 +157,6 @@ public class Commodity implements Parcelable {
         dest.writeString(msg);
         dest.writeString(price);
         dest.writeLong(publishTime);
+        dest.writeByte((byte) (isSold ? 1 : 0));
     }
-
-    public static final Creator<Commodity> CREATOR = new Creator<Commodity>() {
-        @Override
-        public Commodity createFromParcel(Parcel in) {
-            return new Commodity(in);
-        }
-
-        @Override
-        public Commodity[] newArray(int size) {
-            return new Commodity[size];
-        }
-    };
 }

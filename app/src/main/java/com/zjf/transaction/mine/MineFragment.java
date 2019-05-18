@@ -23,6 +23,7 @@ import com.zjf.transaction.base.BaseActivity;
 import com.zjf.transaction.base.BaseFragment;
 import com.zjf.transaction.base.DataResult;
 import com.zjf.transaction.main.PublishActivity;
+import com.zjf.transaction.pages.OrderActivity;
 import com.zjf.transaction.user.UserConfig;
 import com.zjf.transaction.user.api.impl.UserApiImpl;
 import com.zjf.transaction.util.ImageUtil;
@@ -53,7 +54,18 @@ public class MineFragment extends BaseFragment {
         initUserInfoLayout(view);
         initPublishLayout(view);
         initLogout(view);
+        initOrder(view);
         return view;
+    }
+
+    private void initOrder(View view) {
+        ViewGroup orderLayout = view.findViewById(R.id.layout_order);
+        orderLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OrderActivity.start(getActivity(), OrderActivity.class);
+            }
+        });
     }
 
     private void initLogout(View view) {

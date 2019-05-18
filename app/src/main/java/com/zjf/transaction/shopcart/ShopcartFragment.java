@@ -2,18 +2,6 @@ package com.zjf.transaction.shopcart;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.SingleSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +21,13 @@ import com.zjf.transaction.base.BaseConstant;
 import com.zjf.transaction.base.BaseFragment;
 import com.zjf.transaction.base.DataResult;
 import com.zjf.transaction.main.api.impl.MainApiImpl;
+import com.zjf.transaction.main.model.Commodity;
+import com.zjf.transaction.pages.api.impl.OrderApiImpl;
+import com.zjf.transaction.pages.model.OrderInfo;
 import com.zjf.transaction.shopcart.api.impl.ShopcartApiImpl;
 import com.zjf.transaction.shopcart.model.ShopcartItem;
 import com.zjf.transaction.user.UserConfig;
+import com.zjf.transaction.user.model.User;
 import com.zjf.transaction.util.LogUtil;
 import com.zjf.transaction.util.ScreenUtil;
 import com.zjf.transaction.widget.CommonDialogBuilder;
@@ -43,6 +35,17 @@ import com.zjf.transaction.widget.CommonDialogBuilder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.SingleSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by zhengjiafeng on 2019/3/13
@@ -181,7 +184,8 @@ public class ShopcartFragment extends BaseFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 for (int i = 0; i < shopcartItemList.size(); i++) {
-                    shopcartItemList.get(i).setChecked(isChecked);
+                    if (!shopcartItemList.get(i).getCommodity().isSold())
+                        shopcartItemList.get(i).setChecked(isChecked);
                 }
                 shopcartAdapter.setDataList(shopcartItemList);
             }
@@ -205,9 +209,14 @@ public class ShopcartFragment extends BaseFragment {
                             .setPositive("支付", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Toast.makeText(getActivity(), "支付成功", Toast.LENGTH_SHORT).show();
-                                    deletePayItem();
+                                    final ArrayList<ShopcartItem> payItems = getPayItems();
+                                    final ArrayList<String> CommodityIdOfPayItems = getCommodityIdOfPayItems(payItems);
+                                    final List<OrderInfo.Content> contentList = getContentList(payItems);
+                                    deletePayItem(CommodityIdOfPayItems);
+                                    insertOrder(contentList);
                                     tvAllMoney.setText("0");
+                                    cbChooseAll.setChecked(false);
+                                    Toast.makeText(getActivity(), "支付成功", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .show();
@@ -217,19 +226,79 @@ public class ShopcartFragment extends BaseFragment {
         });
     }
 
-    private void deletePayItem() {
-        //商品已被购买，清除主页和购物车中对应的条目
-        final ArrayList<String> commodityList = new ArrayList<>();
-        Iterator<ShopcartItem> iterator = shopcartItemList.iterator();
-        while (iterator.hasNext()) {
-            ShopcartItem item = iterator.next();
-            if (item.isChecked()) {
-                commodityList.add(item.getCommodity().getId());
-                iterator.remove();
-            }
+    /**
+     * 获取付款的订单项
+     *
+     * @param payItems
+     * @return
+     */
+    private List<OrderInfo.Content> getContentList(ArrayList<ShopcartItem> payItems) {
+        final List<OrderInfo.Content> contentList = new ArrayList<>();
+        for (ShopcartItem payItem : payItems) {
+            final User user = payItem.getUser();
+            final Commodity commodity = payItem.getCommodity();
+            contentList.add(new OrderInfo.Content(user.getUserId(), user.getUserName(), user.getUserPicUrl(),
+                    commodity.getId(), getCommodityImageUrl(commodity.getImageUrls()), commodity.getMsg(), commodity.getPrice()));
         }
-        shopcartAdapter.setDataList(shopcartItemList);
-        ShopcartApiImpl.deleteMore(UserConfig.inst().getUserId(), commodityList)
+        return contentList;
+    }
+
+    public String getCommodityImageUrl(String imageUrls) {
+        if (imageUrls == null) {
+            return null;
+        }
+        return imageUrls.split("@@@")[0];
+    }
+
+    /**
+     * 获取付款的商品id列表
+     *
+     * @param payItems
+     * @return
+     */
+    private ArrayList<String> getCommodityIdOfPayItems(ArrayList<ShopcartItem> payItems) {
+        final ArrayList<String> commodityIdList = new ArrayList<>();
+        for (ShopcartItem payItem : payItems) {
+            commodityIdList.add(payItem.getCommodity().getId());
+        }
+        return commodityIdList;
+    }
+
+    /**
+     * 更新订单
+     *
+     * @param contentList 购买的商品的订单项列表
+     */
+    private void insertOrder(List<OrderInfo.Content> contentList) {
+        final String orderId = UserConfig.inst().getUserId() + System.currentTimeMillis();  //用户id和时间戳生成订单号
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setOrderId(orderId);
+        orderInfo.setUserId(UserConfig.inst().getUserId());
+        orderInfo.setContentList(contentList);
+        orderInfo.setOrderTime(System.currentTimeMillis());
+        orderInfo.setOrderMoney(tvAllMoney.getText().toString());
+        OrderApiImpl.addOrder(orderInfo)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe(new Consumer<DataResult<String>>() {
+                    @Override
+                    public void accept(DataResult<String> stringDataResult) throws Exception {
+                        if (stringDataResult.code == DataResult.CODE_SUCCESS) {
+                            LogUtil.d("add order success");
+                        } else {
+                            LogUtil.e("add order failed, msg -> %s", stringDataResult.msg);
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtil.e("add order error, throwable -> %s", throwable.getMessage());
+                    }
+                });
+    }
+
+    private void deletePayItem(final ArrayList<String> payItems) {
+        ShopcartApiImpl.deleteMore(UserConfig.inst().getUserId(), payItems)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .flatMap(new Function<DataResult<String>, SingleSource<DataResult<String>>>() {
@@ -237,7 +306,7 @@ public class ShopcartFragment extends BaseFragment {
                     public SingleSource<DataResult<String>> apply(DataResult<String> stringDataResult) throws Exception {
                         if (stringDataResult.code == DataResult.CODE_SUCCESS) {
                             LogUtil.d("shop item, update shopcart success");
-                            return MainApiImpl.delete(commodityList);
+                            return MainApiImpl.markCommodityIsSold(payItems);
                         } else {
                             LogUtil.d("shop item, update shopcart failed, msg -> %s", stringDataResult.msg);
                             return null;
@@ -250,7 +319,7 @@ public class ShopcartFragment extends BaseFragment {
                     LogUtil.d("shop item, update main page success");
                     Intent intent = new Intent(BaseConstant.ACTION_MAIN);
                     Bundle bundle = new Bundle();
-                    bundle.putStringArrayList(BaseConstant.KEY_MAIN_DELETE, commodityList);
+                    bundle.putStringArrayList(BaseConstant.KEY_MAIN_DELETE, payItems);
                     intent.putExtra(BaseConstant.KEY_MAIN_BUNDLE, bundle);
                     AppConfig.getLocalBroadcastManager().sendBroadcast(intent);
                 } else {
@@ -263,6 +332,21 @@ public class ShopcartFragment extends BaseFragment {
                 LogUtil.d("shop item, update main page error, throwable -> %s", throwable.getMessage());
             }
         });
+    }
+
+    private ArrayList<ShopcartItem> getPayItems() {
+        //商品已被购买，清除主页和购物车中对应的条目
+        final ArrayList<ShopcartItem> itemList = new ArrayList<>();
+        Iterator<ShopcartItem> iterator = shopcartItemList.iterator();
+        while (iterator.hasNext()) {
+            ShopcartItem item = iterator.next();
+            if (item.isChecked()) {
+                itemList.add(item);
+                iterator.remove();
+            }
+        }
+        shopcartAdapter.setDataList(shopcartItemList);
+        return itemList;
     }
 
     @Override

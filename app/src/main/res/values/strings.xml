@@ -22,4 +22,5 @@
     <string name="i_want_to_publish">我要发布</string>
     <string name="chat">咨询</string>
     <string name="logout">注销</string>
+    <string name="order">我的订单</string>
 </resources>

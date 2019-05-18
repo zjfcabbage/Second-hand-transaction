@@ -22,6 +22,7 @@
         <activity android:name=".user.RegisterActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".user.LoginActivity" />
+        <activity android:name=".pages.OrderActivity"/>
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

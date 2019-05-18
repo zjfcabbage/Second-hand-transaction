@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         tools:background="@color/colorAccent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,6 +30,8 @@
                 android:id="@+id/iv_user_pic"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:type="circle"
                 tools:src="@drawable/cat" />
 
@@ -39,10 +41,12 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="16dp"
-                android:gravity="center"
                 android:includeFontPadding="false"
                 android:textColor="@color/color_303030"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/iv_user_pic"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="叶良辰" />
 
             <ImageView
@@ -50,9 +54,26 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="10dp"
-                android:src="@drawable/icon_forward" />
+                android:src="@drawable/icon_forward"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/tv_user_name"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/tv_sold"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="10dp"
+                android:includeFontPadding="false"
+                android:textColor="@color/color_FF5000"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="已售出" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_commodity_info"

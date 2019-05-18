@@ -3,8 +3,13 @@ package com.zjf.transaction.main;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 import android.view.LayoutInflater;
@@ -22,6 +27,7 @@ import com.zjf.transaction.base.DataResult;
 import com.zjf.transaction.main.model.Commodity;
 import com.zjf.transaction.pages.CommodityActivity;
 import com.zjf.transaction.shopcart.api.impl.ShopcartApiImpl;
+import com.zjf.transaction.shopcart.model.ShopcartItem;
 import com.zjf.transaction.user.UserConfig;
 import com.zjf.transaction.user.api.impl.UserApiImpl;
 import com.zjf.transaction.user.model.User;
@@ -123,28 +129,45 @@ public class MainAdapter extends BaseAdapter<Commodity> {
                 public void onClick(View v) {
                     final Commodity commodity = getIndexData();
                     if (commodity != null) {
-                        ShopcartApiImpl.add(UserConfig.inst().getUserId(), commodity.getId())
+                        if (UserConfig.inst().getUserId().equals(commodity.getUserId())) {
+                            Toast.makeText(getContext(), "不能将自己发布的商品加入购物车", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        ShopcartApiImpl.isShopcartExist(UserConfig.inst().getUserId(), commodity.getId())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Consumer<DataResult<String>>() {
+                                .flatMap(new Function<DataResult<Integer>, Single<DataResult<String>>>() {
+                                    @Override
+                                    public Single<DataResult<String>> apply(DataResult<Integer> shopcartItemDataResult) throws Exception {
+                                        if (shopcartItemDataResult.code == DataResult.CODE_SUCCESS) {
+                                            if (shopcartItemDataResult.data > 0) {
+                                                LogUtil.d("商品已经加入购物车了, count -> %d", shopcartItemDataResult.data);
+                                                Toast.makeText(getContext(), "购物车已存在此商品", Toast.LENGTH_SHORT).show();
+                                                return Single.just(new DataResult<String>());
+                                            } else {
+                                                LogUtil.d("购物车不存在此商品");
+                                                return ShopcartApiImpl.add(UserConfig.inst().getUserId(), commodity.getId())
+                                                        .subscribeOn(Schedulers.io())
+                                                        .observeOn(AndroidSchedulers.mainThread());
+                                            }
+                                        } else {
+                                            LogUtil.e("find shopcart item is existed failed, msg -> %s", shopcartItemDataResult.msg);
+                                            return Single.just(new DataResult<String>());
+                                        }
+                                    }
+                                }).subscribe(new Consumer<DataResult<String>>() {
                                     @Override
                                     public void accept(DataResult<String> stringDataResult) throws Exception {
                                         if (stringDataResult.code == DataResult.CODE_SUCCESS) {
                                             Toast.makeText(getContext(), "加入购物车成功", Toast.LENGTH_SHORT).show();
                                             LogUtil.d("add shopcart success");
-                                        } else {
-                                            String msg = stringDataResult.msg;
-                                            if (msg.contains("SQLIntegrityConstraintViolationException")) {
-                                                Toast.makeText(getContext(), "购物车已存在此商品", Toast.LENGTH_SHORT).show();
-                                                LogUtil.e("add shopcart failed, msg -> %s", stringDataResult.msg);
-                                            }
                                         }
                                     }
                                 }, new Consumer<Throwable>() {
                                     @Override
                                     public void accept(Throwable throwable) throws Exception {
                                         Toast.makeText(getContext(), "加入购物车失败，请检查网络后重试", Toast.LENGTH_SHORT).show();
-                                        LogUtil.e("add shopcart error, throwable -> %s", throwable.getMessage());
+                                        throwable.printStackTrace();
                                     }
                                 });
                     }

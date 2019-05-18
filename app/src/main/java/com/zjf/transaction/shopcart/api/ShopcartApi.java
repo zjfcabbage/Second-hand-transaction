@@ -29,4 +29,7 @@ public interface ShopcartApi {
 
     @HTTP(method = "DELETE", path = "/shopcart/deleteMore", hasBody = true)
     Single<DataResult<String>> deleteMore(@Query("userId") String userId, @Body List<String> list);
+
+    @GET("/shopcart/isExist")
+    Single<DataResult<Integer>> isShopcartExist(@Query("userId") String userId, @Query("commodityId") String commodityId);
 }

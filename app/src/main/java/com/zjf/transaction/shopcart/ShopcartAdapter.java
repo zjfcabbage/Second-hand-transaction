@@ -40,6 +40,7 @@ import com.zjf.transaction.widget.CommonDialogBuilder;
 public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
 
     private onItemCheckChangedListener onItemCheckChangedListener;
+    private final static String IS_SOLD = "已售出";
 
     interface onItemCheckChangedListener {
         void onItemCheckChanged(CompoundButton buttonView, boolean isChecked);
@@ -60,6 +61,7 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
         private ImageView ivUserPic, ivCommodityPic;
         private TextView tvUserName, tvCommodityMsg, tvCommodityMoney;
         private CheckBox cbChooseCommodity;
+        private TextView tvIsSold;
 
         public ShopcartHolder(final View itemView) {
             super(itemView);
@@ -68,6 +70,7 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
             userLayout = commodityLayout.findViewById(R.id.layout_user);
             ivUserPic = userLayout.findViewById(R.id.iv_user_pic);
             tvUserName = userLayout.findViewById(R.id.tv_user_name);
+            tvIsSold = userLayout.findViewById(R.id.tv_sold);
             userLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -107,6 +110,13 @@ public class ShopcartAdapter extends BaseAdapter<ShopcartItem> {
             }
             ImageUtil.loadImage(ivUserPic, user.getUserPicUrl());
             tvUserName.setText(user.getUserName());
+            if (commodity.isSold()) {
+                tvIsSold.setText(IS_SOLD);
+                cbChooseCommodity.setEnabled(false);
+            } else {
+                tvIsSold.setText("");
+                cbChooseCommodity.setEnabled(true);
+            }
             ImageUtil.loadImage(ivCommodityPic, getFirstImageUrl(commodity.getImageUrls()));
             tvCommodityMsg.setText(commodity.getMsg());
             tvCommodityMoney.setText(PriceUtil.createPrice(commodity.getPrice()));

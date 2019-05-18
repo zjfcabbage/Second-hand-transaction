@@ -27,4 +27,8 @@ public class ShopcartApiImpl {
     public static Single<DataResult<String>> deleteMore(String userId, List<String> commodityIdList) {
         return shopcartApi.deleteMore(userId, commodityIdList);
     }
+
+    public static Single<DataResult<Integer>> isShopcartExist(String userId, String commodityId) {
+        return shopcartApi.isShopcartExist(userId, commodityId);
+    }
 }
