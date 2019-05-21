@@ -20,6 +20,9 @@ public interface MainApi {
     @POST("/main/publish")
     Single<DataResult<String>> publish(@Body Commodity commodity);
 
+    @GET("/main/getByName")
+    Single<DataResult<List<Commodity>>> getByName(@Query("name") String name, @Query("pageNum") int pageNum);
+
     @HTTP(method = "DELETE", path = "/main/delete", hasBody = true)
     Single<DataResult<String>> delete(@Body List<String> list);
 

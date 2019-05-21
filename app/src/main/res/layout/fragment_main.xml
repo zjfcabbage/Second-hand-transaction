@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/layout_search"
+        android:id="@+id/layout_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -14,7 +14,7 @@
         android:focusableInTouchMode="true"
         android:orientation="horizontal">
 
-        <EditText
+        <com.zjf.transaction.widget.SearchEditText
             android:id="@+id/et_search"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -23,9 +23,13 @@
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:background="@drawable/bg_edittext"
-            android:drawableEnd="@drawable/icon_search"
+            android:gravity="center_vertical"
             android:hint="@string/please_input_name"
-            android:paddingStart="15dp"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:textColor="@color/color_303030"
             android:textSize="15sp" />
 
@@ -41,7 +45,7 @@
         android:id="@+id/layout_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/layout_search"
+        android:layout_below="@id/layout_top"
         android:background="@color/color_F5F5F5">
 
         <androidx.recyclerview.widget.RecyclerView

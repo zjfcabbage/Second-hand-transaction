@@ -20,6 +20,10 @@ public class MainApiImpl {
         return mainApi.publish(commodity);
     }
 
+    public static Single<DataResult<List<Commodity>>> getByName(String name, int pageNum) {
+        return mainApi.getByName(name, pageNum);
+    }
+
     public static Single<DataResult<String>> delete(List<String> list) {
         return mainApi.delete(list);
     }

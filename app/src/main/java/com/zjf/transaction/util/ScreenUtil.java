@@ -1,16 +1,22 @@
 package com.zjf.transaction.util;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.hardware.input.InputManager;
 import android.os.Build;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.IBinder;
+import android.os.TokenWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 
 import com.zjf.transaction.R;
 import com.zjf.transaction.app.AppConfig;
@@ -93,6 +99,12 @@ public class ScreenUtil {
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return metrics.widthPixels;
     }
+
+    public static void hideSoftInput(Context context, IBinder token) {
+        InputMethodManager manager = (InputMethodManager) context.getSystemService(Service.INPUT_METHOD_SERVICE);
+        manager.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
 
     /**
      * 沉浸式状态栏
